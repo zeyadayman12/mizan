@@ -19,7 +19,8 @@ It runs on a phone (installed to the home screen) or a laptop, needs no internet
 | **Your own sources** | Add where money comes from (e.g. Dad, Eidiya, an event) straight from the Money-in screen. Any source can have its own split. |
 | **Extra sadaqah** | Raise sadaqah for a single income, with a clear warning. Only that entry changes. |
 | **10-minute undo** | A money-in entry can be undone for 10 minutes, measured from the moment it was saved (it keeps counting when the app is closed). After that it becomes final. |
-| **Savings battery** | A green battery on Home fills up as your savings (cash + gold) approach a target you set. It charges with an animation when money is saved. |
+| **Savings jar** | A jar on Home fills with green as your savings (cash + gold) approach a target you set. Coins drop in and an encouraging message appears when you save. |
+| **Sadaqah blessing** | Giving sadaqah shows «ما نقصت صدقةٌ من مال» and «تقبّل الله». |
 | **Gold rule** | For every 500 EGP saved, Mizan reminds you to buy 250 EGP of gold. It tracks grams, karat, and what the gold is worth at today's price. |
 | **Zakat check** | Compares savings plus gold against the nisab (85 g of 21k gold, per Egypt's Dar al-Ifta) and tracks the lunar year. |
 | **Goals** | Things to buy, with optional dates. Mizan says whether you're on track and how much more per month you'd need. |

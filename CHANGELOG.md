@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9: Savings jar & sadaqah blessing (27 Sep 2026)
+- "Yours to spend" and Savings now sit side by side as two tall cards.
+- Savings is shown as a jar that fills with green toward your target (replaces the battery).
+- When savings grow, coins drop into the jar, the level rises, and an encouraging message appears.
+- Giving sadaqah shows «ما نقصت صدقةٌ من مال» (Sahih Muslim) and «تقبّل الله»; paying zakat shows «تقبّل الله».
+
 ## v0.8: Savings battery & cleaner Home (27 Sep 2026)
 - New green savings battery on Home. It fills toward a savings target you set, and shows cash + gold saved.
 - Charging animation (lightning bolt and "+amount") when savings grow; confetti when the target is reached.
