@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.8: Savings battery & cleaner Home (27 Sep 2026)
+- New green savings battery on Home. It fills toward a savings target you set, and shows cash + gold saved.
+- Charging animation (lightning bolt and "+amount") when savings grow; confetti when the target is reached.
+- Cleaner Home: Spend button inside the top card, compact two-column pot tiles, and no extra buttons at the bottom.
+- Savings sheet shows the cash vs gold breakdown and a Savings target button.
+
 ## v0.7: iPhone ready (27 Sep 2026)
 - Hosted on GitHub Pages so the iPhone can install it to the Home Screen.
 - Backup files can be picked on iPhone (the file picker no longer greys out .mizan files).

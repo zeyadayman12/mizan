@@ -1,5 +1,5 @@
 // Mizan offline cache. Bump VERSION whenever index.html changes so phones pick up the update.
-const VERSION = "mizan-v7";
+const VERSION = "mizan-v8";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
