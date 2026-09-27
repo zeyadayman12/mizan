@@ -1,0 +1,1264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mizan">
+<meta name="referrer" content="no-referrer">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>Mizan</title>
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0b0b0c; --card:#161618; --card2:#1d1d20; --ink:#f3efe6; --muted:#9a948a; --line:#2a2a2e;
+  --gold:#d9b45a; --gold2:#b8892b; --gold-hi:#f3d98b;
+  --accent:#d9b45a; --accent-ink:#141210; --soft:rgba(217,180,90,.14);
+  --danger:#ef7a66; --ok:#6fd19f; --warn-bg:rgba(217,180,90,.13); --warn-ink:#f1d499; --bad-bg:rgba(239,122,102,.14); --bad-ink:#f7a797;
+  --glow:0 0 0 1px rgba(217,180,90,.25), 0 6px 24px rgba(217,180,90,.18);
+  --r:18px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Tahoma,system-ui,sans-serif;font-size:17px;line-height:1.45;
+  padding:env(safe-area-inset-top) 0 calc(80px + env(safe-area-inset-bottom));}
+body.locked{padding-bottom:0}
+body.locked .tabs{display:none}
+.wrap{max-width:520px;margin:0 auto;padding:18px 16px}
+h1{font-size:28px;margin:4px 0 14px;letter-spacing:-.02em}
+[dir=rtl] h1{letter-spacing:0}
+h2{font-size:15px;margin:24px 4px 8px;color:var(--muted);font-weight:600}
+.sub{color:var(--muted);font-size:14px}
+.num{font-variant-numeric:tabular-nums}
+.ic{width:22px;height:22px;flex:0 0 auto}
+[dir=rtl] .flip{transform:scaleX(-1)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.top h1{margin-bottom:10px}
+.iconbtn{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:14px;width:44px;height:44px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card.warn{background:var(--warn-bg);border-color:rgba(217,180,90,.35);color:var(--warn-ink)}
+.card+.card{margin-top:10px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#f0d27e 0%,#d9b45a 45%,#a8791f 100%);color:#15120c;border:0;padding:22px;box-shadow:0 10px 30px rgba(217,180,90,.25)}
+.hero::after{content:"";position:absolute;inset:-40% -60%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);animation:shine 4.5s var(--ease) 1s infinite;pointer-events:none}
+@keyframes shine{0%{transform:translateX(-60%)}35%,100%{transform:translateX(60%)}}
+.hero .label{opacity:.85;font-size:15px}
+.hero .big{font-size:40px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.rows{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;font:inherit;color:inherit;text-align:start;cursor:pointer;transition:background .15s}
+button.row:active{background:var(--card2)}
+.row:last-child{border-bottom:0}
+.row.static{cursor:default}
+.row .grow{flex:1;min-width:0}
+.row .t{font-weight:600}
+.row .m{font-size:13px;color:var(--muted)}
+.row .v{font-weight:650;white-space:nowrap}
+.row .chev{color:var(--muted);width:18px;height:18px}
+.bubble{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c);transition:transform .2s var(--ease)}
+.row:active .bubble{transform:scale(.9) rotate(-6deg)}
+.btn{appearance:none;border:0;border-radius:14px;padding:14px 16px;font:inherit;font-weight:600;cursor:pointer;background:linear-gradient(180deg,#e6c46e,#c99b3c);color:var(--accent-ink);display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s var(--ease),box-shadow .2s,filter .2s;box-shadow:0 4px 14px rgba(217,180,90,.18)}
+.btn:active{transform:scale(.96)}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:var(--card2);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.small{padding:8px 12px;font-size:14px;border-radius:11px;white-space:nowrap}
+.btn.small .ic{width:18px;height:18px}
+.btn.danger{background:transparent;color:var(--danger);border:1px solid var(--line);box-shadow:none}
+.btn.block{width:100%;display:flex}
+.btn:disabled{opacity:.45}
+.two{display:flex;gap:10px}
+.two>*{flex:1;min-width:0}
+label.f{display:block;font-size:14px;color:var(--muted);margin:16px 4px 6px}
+input,select{width:100%;font:inherit;font-size:17px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px;box-shadow:0 0 18px rgba(217,180,90,.2)}
+input[type=date]{color-scheme:dark}
+.amount{font-size:36px;font-weight:700;padding:12px 14px;text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 15px;font:inherit;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:transform .15s var(--ease),background .2s,color .2s,box-shadow .2s}
+.chip:active{transform:scale(.94)}
+.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);box-shadow:0 0 14px rgba(217,180,90,.35);animation:pop .25s var(--ease)}
+.chip .ic{width:18px;height:18px}
+.bar{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:4px 0 12px;background:var(--line)}
+.bar span{display:block;height:100%}
+.prog{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:10px}
+.prog span{display:block;height:100%;background:var(--c,var(--accent))}
+.hbar{display:grid;grid-template-columns:minmax(70px,35%) 1fr auto;gap:10px;align-items:center;padding:6px 0;font-size:15px}
+.hbar .tr{height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+.hbar .tr span{display:block;height:100%;background:var(--c,var(--accent))}
+.empty{color:var(--muted);text-align:center;padding:26px 12px;font-size:15px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--accent);vertical-align:middle}
+.tag.warn{background:var(--warn-bg);color:var(--warn-ink)}
+.tag.bad{background:var(--bad-bg);color:var(--bad-ink)}
+.note{font-size:13px;color:var(--muted);margin:8px 4px 0}
+.undo-strip{display:flex;align-items:center;gap:10px;background:var(--soft);color:var(--ink);border-radius:14px;padding:10px 12px;margin-top:10px;font-size:14px}
+.undo-strip .grow{flex:1}
+.timer{font-variant-numeric:tabular-nums;font-weight:700}
+.stat{font-size:26px;font-weight:700}
+.delta{font-size:13px;font-weight:600;color:var(--muted)}
+.delta.up{color:var(--ok)} .delta.down{color:var(--danger)}
+.mnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.mnav b{font-size:17px}
+.seg{display:flex;background:var(--line);border-radius:13px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;font:inherit;font-size:14px;padding:9px 4px;border-radius:10px;color:var(--ink);cursor:pointer}
+.seg button.on{background:var(--card2);color:var(--gold);font-weight:600;box-shadow:0 0 0 1px rgba(217,180,90,.3)}
+.pctrow{display:grid;grid-template-columns:1fr 80px 30px;gap:10px;align-items:center;padding:6px 0}
+.pctrow input{padding:9px 10px;font-size:16px;text-align:end}
+.pctrow .x{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}
+details.adv>summary{list-style:none;cursor:pointer}
+details.adv>summary::-webkit-details-marker{display:none}
+details.adv[open]>summary .chev{transform:rotate(90deg)}
+details.link summary{cursor:pointer;color:var(--accent);font-size:15px;font-weight:600;padding:8px 4px;list-style:none}
+details.link summary::-webkit-details-marker{display:none}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(18,18,20,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;z-index:10}
+.tab{flex:1;max-width:120px;background:none;border:0;font:inherit;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;cursor:pointer;transition:color .2s}
+.tab .tw{width:52px;height:32px;border-radius:12px;display:grid;place-items:center;transition:background .25s var(--ease),box-shadow .25s var(--ease)}
+.tab.on .tw{background:rgba(217,180,90,.16);box-shadow:0 0 18px rgba(217,180,90,.35), inset 0 0 0 1px rgba(217,180,90,.35);animation:tabpop .4s var(--ease)}
+@keyframes tabpop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.tab .ic{width:24px;height:24px}
+.tab.on{color:var(--gold);font-weight:700;text-shadow:0 0 12px rgba(217,180,90,.45)}
+.tab.add.on{color:var(--accent);font-weight:600}
+.tab.add .tw{background:linear-gradient(180deg,#e6c46e,#c99b3c);color:var(--accent-ink);box-shadow:0 4px 14px rgba(217,180,90,.3)}
+.tab.add.on .tw{box-shadow:0 0 22px rgba(217,180,90,.6), inset 0 0 0 2px rgba(255,255,255,.35)}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet-bg.on{opacity:1;pointer-events:auto}
+.sheet{background:var(--card);border:1px solid var(--line);border-bottom:0;width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:20px 16px calc(18px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto;transform:translateY(100%);transition:transform .32s var(--ease);box-shadow:0 -10px 40px rgba(0,0,0,.5)}
+.sheet-bg.on .sheet{transform:none}
+.sheet::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--line);margin:-8px auto 14px}
+.sheet h3{margin:0 0 6px;font-size:21px}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translate(-50%,16px) scale(.95);background:var(--card2);color:var(--ink);border:1px solid rgba(217,180,90,.35);box-shadow:var(--glow);padding:11px 16px;border-radius:14px;font-size:15px;z-index:30;opacity:0;transition:opacity .25s,transform .3s var(--ease);pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0) scale(1)}
+.hidden{display:none!important}
+.lock{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;text-align:center}
+.lock img{width:72px;height:72px;border-radius:20px;box-shadow:0 0 30px rgba(217,180,90,.35);animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px)}}
+.lock h1{margin:14px 0 4px}
+.dots{display:flex;gap:14px;justify-content:center;margin:22px 0 26px;min-height:16px}
+.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--accent);display:block}
+.dots i.f{background:var(--accent);box-shadow:0 0 10px rgba(217,180,90,.6);animation:pop .2s var(--ease)}
+.dots.shake{animation:sh .35s}
+@keyframes sh{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pad{display:grid;grid-template-columns:repeat(3,76px);gap:14px;justify-content:center;direction:ltr}
+.key{width:76px;height:76px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:28px;font-weight:500;cursor:pointer}
+.key.fn{background:transparent;border-color:transparent;font-size:20px;color:var(--muted)}
+.key.go{background:linear-gradient(180deg,#e6c46e,#c99b3c);color:var(--accent-ink);border-color:var(--accent);font-size:24px}
+.key{transition:transform .12s var(--ease),background .15s}
+.key:active{background:var(--card2)}
+.key:active{transform:scale(.95)}
+.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;margin-top:22px;cursor:pointer;text-decoration:underline}
+
+/* ---- motion ---- */
+@keyframes pop{0%{transform:scale(.85)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}}
+.enter > *{animation:rise .45s var(--ease) both}
+.enter .rows > *{animation:rise .4s var(--ease) both}
+.enter .prog span,.enter .bar span,.enter .hbar .tr span{transform-origin:left;animation:grow .9s var(--ease) both .15s}
+[dir=rtl] .enter .prog span,[dir=rtl] .enter .bar span,[dir=rtl] .enter .hbar .tr span{transform-origin:right}
+.bar span{transition:width .35s var(--ease)}
+.tag{animation:pop .35s var(--ease) both}
+.undo-strip{animation:rise .35s var(--ease) both}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation:none!important;transition:none!important} }
+/* ---- add rows / pickers ---- */
+.addrow .t{color:var(--gold)}
+.bubble.dash{background:transparent;border:1.5px dashed rgba(217,180,90,.55);color:var(--gold)}
+.chip.addchip{border-style:dashed;border-color:rgba(217,180,90,.55);color:var(--gold);background:transparent}
+.chip.iconchip{padding:9px;width:44px;height:44px;justify-content:center}
+.sw{width:36px;height:36px;border-radius:50%;background:var(--c);border:3px solid var(--card);outline:2px solid transparent;cursor:pointer;transition:transform .15s var(--ease),outline-color .2s}
+.sw.on{outline-color:var(--c);transform:scale(1.1);box-shadow:0 0 14px var(--c)}
+.linkish{background:none;border:0;color:var(--gold);font:inherit;font-weight:600;cursor:pointer;padding:0;text-align:start;text-decoration:underline dotted}
+/* ---- sadaqah stepper ---- */
+.step{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:14px}
+.step .grow{flex:1}
+.step .sb{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font:inherit;font-size:22px;cursor:pointer;display:grid;place-items:center;transition:transform .12s var(--ease)}
+.step .sb:active{transform:scale(.9)}
+.step .sb:disabled{opacity:.35}
+.step .pv{min-width:58px;text-align:center;font-weight:700;font-size:18px;color:var(--gold)}
+.step.up{border-color:rgba(217,180,90,.6);box-shadow:var(--glow)}
+</style>
+</head>
+<body class="locked">
+<div class="wrap" id="app"></div>
+
+<nav class="tabs" id="tabs">
+  <button class="tab" data-v="home"><span class="tw" data-ic="home"></span><span data-t="Home"></span></button>
+  <button class="tab add" data-v="add"><span class="tw" data-ic="plus"></span><span data-t="Add"></span></button>
+  <button class="tab" data-v="goals"><span class="tw" data-ic="target"></span><span data-t="Goals"></span></button>
+  <button class="tab" data-v="more"><span class="tw" data-ic="grid"></span><span data-t="More"></span></button>
+</nav>
+
+<div class="sheet-bg" id="sheetBg"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+<canvas id="fx" width="0" height="0"></canvas>
+<input type="file" id="importFile" accept="application/json,.json,.mizan" class="hidden">
+
+<script>
+"use strict";
+/* ================= icons (simple line icons) ================= */
+const IC = {
+  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  minus:'<path d="M5 12h14"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',
+  grid:'<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>',
+  lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  coins:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/>',
+  wallet:'<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M16 13h2"/><path d="M6 6l9-3 1 3"/>',
+  heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+  bag:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/>',
+  users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14c2.6.4 4.5 2.8 4.5 6"/>',
+  dot:'<circle cx="12" cy="12" r="6"/>',
+  chart:'<path d="M4 20V11M10 20V5M16 20v-6M3 20h18"/>',
+  gold:'<path d="M3 19l2.5-6h13L21 19z"/><path d="M7.5 13l2-6h5l2 6"/>',
+  swap:'<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  sliders:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
+  chev:'<path d="M9 6l6 6-6 6"/>',
+  back:'<path d="M15 6l-6 6 6 6"/>',
+  undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+  check:'<path d="M5 12l5 5 9-10"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  shield:'<path d="M12 3l7 3v6c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6z"/>',
+  gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8C9 8 7 4 9.5 4S12 8 12 8zM12 8c3 0 5-4 2.5-4S12 8 12 8z"/>',
+  car:'<path d="M5 16l1.5-5h11L19 16"/><rect x="3" y="13" width="18" height="5" rx="2"/><circle cx="7.5" cy="18.5" r="1.5"/><circle cx="16.5" cy="18.5" r="1.5"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/>',
+  phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+  cup:'<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M11 3v3"/>',
+  plane:'<path d="M3 13l18-8-6 16-3-7z"/><path d="M12 14l3-3"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  game:'<rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="16" cy="11.5" r="1"/><circle cx="18" cy="13.5" r="1"/>',
+  house:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/>'
+};
+const PICK_ICONS = ["heart","gift","bag","users","car","book","phone","cup","plane","game","house","star"];
+const PICK_COLORS = ["#ee7fab","#ad8ff0","#f39a62","#6cc6c7","#8fb0f0","#a8d060","#f0d27e","#ef7a66"];
+function ic(n, cls){ return `<svg class="ic ${cls||""}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n]||IC.dot}</svg>`; }
+const POT_ICON = { sadaqah:"moon", savings:"coins", me:"wallet", nour:"heart", tobuy:"bag", friends:"users" };
+function potIcon(p){ return p.icon || POT_ICON[p.id] || "dot"; }
+function bubble(p){ return `<span class="bubble" style="--c:${p.color}">${ic(potIcon(p))}</span>`; }
+
+/* ================= translations ================= */
+const AR = /*AR-START*/{"(must be 100%)":"(لازم يكون 100%)","4 to 6 digits, then press ✓.":"من 4 إلى 6 أرقام، ثم اضغط ✓.","Above nisab":"فوق النصاب","Add":"إضافة","Add a name and a price.":"اكتب الاسم والسعر.","Add a name and an amount.":"اكتب الاسم والمبلغ.","Add a pot":"إضافة بند","Add about {x} a month to make it.":"زوّد حوالي {x} في الشهر علشان تلحق.","Add gold purchase":"تسجيل شراء ذهب","Add something you want to buy. Mizan tells you when you can afford it.":"أضف شيئًا تريد شراءه، وميزان يقول لك متى تقدر تشتريه.","Added {x} from {s}":"أضفت {x} من {s}","Added. Give it a % so the total is 100%.":"تمت الإضافة. أعطه نسبة ليصبح المجموع 100%.","Advanced":"إعدادات متقدمة","All":"الكل","Already there.":"موجود بالفعل.","Amount":"المبلغ","Anyone who opens this file can read your data. Continue?":"أي شخص يفتح هذا الملف يستطيع قراءة بياناتك. متابعة؟","Are you sure? This can't be undone.":"هل أنت متأكد؟ لا يمكن التراجع عن هذا.","Aunt":"طنط","Auto-lock":"القفل التلقائي","Back":"رجوع","Back to normal split":"ارجع للتقسيم العادي","Backup PIN":"رمز النسخة الاحتياطية","Backup restored.":"تمت استعادة النسخة.","Behind":"متأخر","Below nisab":"أقل من النصاب","Bought":"اشتريت","Bought gold":"شراء ذهب","Bought “{n}”":"اشتريت «{n}»","Buy gold":"اشترِ ذهب","Buy gold worth":"اشترِ ذهبًا بقيمة","Buy now: {x}":"اشترِ الآن: {x}","By when? (optional)":"قبل تاريخ؟ (اختياري)","Came in":"الوارد","Cancel":"إلغاء","Change":"تغيير","Change PIN":"تغيير الرمز","Choose a PIN":"اختر رمزًا سريًا","Close":"إغلاق","Couldn't save. Export a backup now.":"تعذّر الحفظ. احفظ نسخة احتياطية الآن.","Current PIN":"الرمز الحالي","Current PIN is wrong.":"الرمز الحالي غير صحيح.","Dad":"بابا","Danger zone":"منطقة الخطر","Date":"التاريخ","Date passed":"فات الموعد","Delete":"حذف","Delete goal":"حذف الهدف","Delete this entry?":"حذف هذا القيد؟","Delete this goal?":"حذف هذا الهدف؟","Delete this loan?":"حذف هذا الدَّين؟","Deleted.":"تم الحذف.","Done":"تم","Done. Don't forget your PIN.":"تم. لا تنسَ رمزك.","Due now":"واجبة الآن","Due on {d} if you stay above nisab — about {x}.":"تجب في {d} لو ظللت فوق النصاب — حوالي {x}.","EGP":"جنيه","Edit":"تعديل","Edit goal":"تعديل الهدف","Eidiya":"العيدية","Enjoy it!":"بالهنا!","Enter today's gold price above first.":"اكتب سعر الذهب اليوم بالأعلى أولًا.","Enter your PIN":"اكتب رمزك السري","Erase ALL data on this device?":"مسح كل البيانات على هذا الجهاز؟","Erase everything":"مسح كل شيء","Exact":"بالضبط","Family":"العيلة","Final":"نهائي","First month":"أول شهر","For every (saved)":"لكل (مدّخر)","Forgot PIN?":"نسيت الرمز؟","For…":"لـ…","Friends outings":"خروجات الأصحاب","From":"من","From whom?":"من مين؟","Fully paid.":"تم السداد بالكامل.","Gave sadaqah":"أخرجت صدقة","Give sadaqah":"أخرج الصدقة","Give {x} as sadaqah":"أخرج {x} صدقة","Goals":"الأهداف","Gold & zakat":"الذهب والزكاة","Gold & zakat rules":"قواعد الذهب والزكاة","Gold bought: {x}":"ذهب تم شراؤه: {x}","Gold purchase":"شراء ذهب","Gold worth {x}":"ذهب قيمته {x}","Got money? Tap “Money in” and Mizan splits it for you.":"جالك فلوس؟ اضغط «فلوس جت» وميزان يقسّمها لك.","Grams (optional)":"الوزن بالجرام (اختياري)","Grandmother":"تيتا","History":"السجل","Home":"الرئيسية","How money is split":"طريقة تقسيم الفلوس","How much did you pay?":"دفعت كام؟","I borrowed":"استلفت","I borrowed money":"استلفت فلوس","I bought the gold":"اشتريت الذهب","I gave sadaqah":"أخرجت صدقة","I lent":"سلّفت","I lent money":"سلّفت فلوس","I paid back":"سدّدت","I paid zakat":"أخرجت الزكاة","If you forget your PIN, your data can't be opened — not even from a backup.":"لو نسيت رمزك، لا يمكن فتح بياناتك — ولا حتى من نسخة احتياطية.","In":"داخل","Karat":"العيار","Keep some for something specific":"خصّص جزءًا لشيء معيّن","Language":"اللغة","Loans":"السلف والديون","Lock":"اقفل","Locked with your PIN":"مقفولة برمزك","Made a mistake? You can undo for 10 minutes. After that it's final.":"غلطت؟ تقدر تتراجع خلال 10 دقائق. بعدها يصبح نهائيًا.","May it be accepted.":"تقبّل الله.","Me":"مصروفي","Mizan":"ميزان","Money in":"فلوس جت","Money out":"فلوس خرجت","Money sources":"مصادر الفلوس","Money-in entries can be undone for 10 minutes, then they're final.":"قيود الفلوس الداخلة يمكن التراجع عنها خلال 10 دقائق، بعدها تصبح نهائية.","Monthly report":"التقرير الشهري","More":"المزيد","Move":"نقل","Move money":"نقل فلوس","Moved {a} → {b}":"نقل من {a} إلى {b}","Moved.":"تم النقل.","Name of the new pot:":"اسم البند الجديد:","New":"جديد","New PIN (4–6 digits)":"الرمز الجديد (4–6 أرقام)","New PIN again":"الرمز الجديد مرة أخرى","New goal":"هدف جديد","New source":"مصدر جديد","Next month":"الشهر التالي","Nisab grams":"جرامات النصاب","Nisab: {g} g of {k}k gold (Dar al-Ifta). Lunar year. For your exact case, ask a scholar.":"النصاب: {g} جرام ذهب عيار {k} (دار الإفتاء). عام هجري. لحالتك بالتحديد اسأل عالمًا.","No gold yet.":"لا يوجد ذهب بعد.","No open loans.":"لا توجد سلف مفتوحة.","Note":"ملاحظة","Nothing here yet.":"لا يوجد شيء بعد.","Nour":"نور","Now buy gold for {x}":"اشترِ الآن ذهبًا بـ {x}","On track":"على الطريق","Only {x} could be kept aside.":"أمكن تخصيص {x} فقط.","Open":"افتح","Open Mizan from its file on your laptop, or its icon on your phone.":"افتح ميزان من ملفه على اللابتوب، أو من أيقونته على الموبايل.","Other":"أخرى","Out":"خارج","Owed to you":"لك","Owed to you {a} · You owe {b}":"لك {a} · عليك {b}","PIN changed.":"تم تغيير الرمز.","PIN must be 4 to 6 digits.":"الرمز يجب أن يكون من 4 إلى 6 أرقام.","Paid from savings ({x}).":"يُدفع من الادخار ({x}).","Paid zakat":"أخرجت الزكاة","Pay from":"يُدفع من","Pay zakat":"أخرج الزكاة","Pay {x} (2.5%).":"أخرج {x} (2.5%).","Pick two different pots.":"اختر بندين مختلفين.","Premiere event":"إيفنت بريمير","Previous month":"الشهر السابق","Price":"السعر","Put into":"أضيفت إلى","Ready":"جاهز","Remove":"حذف","Remove this pot?":"حذف هذا البند؟","Remove “{s}”? Old entries stay.":"حذف «{s}»؟ القيود القديمة ستبقى.","Replace everything here with this backup?":"استبدال كل شيء هنا بهذه النسخة؟","Restore a backup":"استعادة نسخة احتياطية","Rounding":"التقريب","Sadaqah":"الصدقة","Sadaqah and savings are taken first.":"الصدقة والادخار يُحسبان أولًا.","Sadaqah and savings come from the full amount. The rest is shared by the other pots.":"الصدقة والادخار من المبلغ كاملًا، والباقي يتقسّم على البنود الأخرى.","Sadaqah given":"صدقة أُخرجت","Sadaqah rounds up. Leftovers go to “Me”.":"الصدقة تُقرَّب لأعلى، والباقي يذهب إلى «مصروفي».","Same as last month":"نفس الشهر الماضي","Save":"حفظ","Save a backup":"حفظ نسخة احتياطية","Save an unlocked copy":"حفظ نسخة غير مقفولة","Save {x}":"ادّخر {x}","Saved":"المدّخر","Saved to your Downloads.":"تم الحفظ في التنزيلات.","Saved.":"تم الحفظ.","Savings & gold":"الادخار والذهب","Security & backup":"الأمان والنسخ الاحتياطي","Settings":"الإعدادات","Settled":"تم سدادها","Special split for {s}":"تقسيم خاص لـ {s}","Spend":"اصرف","Spent":"المصروف","Start date":"تاريخ البداية","Taken from":"مأخوذة من","Taken from {p}.":"تُخصم من {p}.","Tap ★ to give a source its own split, e.g. more savings from Eidiya.":"اضغط ★ لتعطي مصدرًا تقسيمًا خاصًا، مثلًا ادخار أكثر من العيدية.","That's more than what's left.":"هذا أكثر من المتبقي.","The day your money first reached nisab, or the day you last paid zakat.":"اليوم الذي بلغ فيه مالك النصاب أول مرة، أو آخر يوم أخرجت فيه الزكاة.","The new PINs don't match.":"الرمزان الجديدان غير متطابقين.","They didn't match. Try again.":"غير متطابقين. حاول مرة أخرى.","They paid back":"ردّها","This backup uses a different PIN.":"هذه النسخة برمز مختلف.","This isn't a Mizan backup.":"هذا ليس نسخة احتياطية لميزان.","This pot has {x}. It will move to “Me”. Remove it?":"في هذا البند {x}، وسيتم نقلها إلى «مصروفي». حذفه؟","To":"إلى","To do":"مطلوب منك","To whom?":"لمين؟","To {n}":"لأقرب {n}","To-buy list":"قائمة المشتريات","Today's price, 1 g of 21k":"سعر اليوم، جرام عيار 21","Too late — this entry is final now.":"فات الوقت — هذا القيد أصبح نهائيًا.","Too many tries. Wait {n} seconds.":"محاولات كثيرة. انتظر {n} ثانية.","Total must be 100%.":"المجموع لازم يكون 100%.","Total: {x}%":"المجموع: {x}%","Type a price.":"اكتب السعر.","Type it again":"اكتبه مرة أخرى","Type the amount":"اكتب المبلغ","Type the amount.":"اكتب المبلغ.","Undo":"تراجع","Undo {x} from {s}? You can enter it again.":"التراجع عن {x} من {s}؟ تقدر تدخلها من جديد.","Undone.":"تم التراجع.","Updated {d}":"آخر تحديث {d}","Used only for money from {s}.":"يُستخدم فقط للفلوس القادمة من {s}.","What do you want?":"عايز تشتري إيه؟","What for?":"على إيه؟","Who is it from?":"الفلوس من مين؟","Without the PIN your data can't be opened. Erase everything and start again?":"بدون الرمز لا يمكن فتح بياناتك. تمسح كل شيء وتبدأ من جديد؟","Works offline. Nothing leaves this device.":"يعمل بدون إنترنت. لا شيء يغادر هذا الجهاز.","Worth now":"قيمته الآن","Wrong PIN.":"رمز خاطئ.","Wrong PIN. Wait {n} seconds.":"رمز خاطئ. انتظر {n} ثانية.","Year started {s}. What counts is {d}.":"بدأ العام في {s}. والعبرة بيوم {d}.","You can buy “{n}” now":"تقدر تشتري «{n}» الآن","You owe":"عليك","You paid":"دفعت","Your gold":"ذهبك","Your plan":"خطتك","Your pots":"بنودك","Your wealth {w} · Nisab {n}":"مالك {w} · النصاب {n}","Yours to spend":"مصروفك","Zakat":"الزكاة","Zakat paid":"زكاة أُخرجت","Zakat year start":"بداية عام الزكاة","by {d}":"قبل {d}","incl. {x}":"منها {x}","owes you":"عليه لك","vs last month":"عن الشهر الماضي","you owe":"عليك","{n} min":"{n} دقيقة","{p} only has {x}. Continue?":"في {p} {x} فقط. تكمل؟","{x} for {p}":"{x} لـ {p}","{x} from {s}":"{x} من {s}","{x} is yours":"{x} لك","{x} more to reach nisab.":"باقي {x} لبلوغ النصاب.","{x} of {y} left":"باقي {x} من {y}","{x} to go":"باقي {x}","Sadaqah this time":"الصدقة هذه المرة","Normal: {p}%":"العادي: {p}%","Extra sadaqah this time":"صدقة زيادة هذه المرة","{x} instead of {y}. The other pots get less from this money only. Next time it's back to {p}%.":"{x} بدلًا من {y}. البنود الأخرى تأخذ أقل من هذه الفلوس فقط. المرة القادمة ترجع {p}%.","Only this money is affected. Next time it's back to {p}%.":"هذه الفلوس فقط تتأثر. المرة القادمة ترجع {p}%.","Extra sadaqah this time ({p}%)":"صدقة زيادة هذه المرة ({p}%)","sadaqah {p}%":"صدقة {p}%","e.g. Nour, things to buy, outings":"مثلًا: نور، مشتريات، خروجات","Add a source":"إضافة مصدر","Where does your money come from? e.g. Dad, Eidiya, an event.":"فلوسك بتيجي منين؟ مثلًا: بابا، العيدية، إيفنت.","Edit pot":"تعديل البند","New pot":"بند جديد","Name":"الاسم","e.g. Nour":"مثلًا: نور","Icon":"الأيقونة","Color":"اللون","Share of each income":"نصيبه من كل دخل","“Me” will get {p}%":"«مصروفي» سيأخذ {p}%","Give it a name.":"اكتب اسمًا.","Pot added.":"تمت إضافة البند.","Who or where the money comes from.":"مين أو منين الفلوس جاية.","e.g. Dad":"مثلًا: بابا","Remove pot":"حذف البند","No sources yet.":"لا توجد مصادر بعد.","Reset pot":"تصفير البند","Reset {p}":"تصفير {p}","{p} goes from {x} back to 0.":"{p} سيرجع من {x} إلى صفر.","Where should the money go?":"الفلوس تروح فين؟","Nowhere, it's gone":"مش هتروح، الفلوس خلصت","You can undo this from History.":"تقدر تتراجع عن هذا من السجل.","Reset":"تصفير","{p} is now 0.":"{p} الآن صفر.","Reset {p} → {q}":"تصفير {p} إلى {q}"}/*AR-END*/;
+const POT_NAMES = { sadaqah:"Sadaqah", savings:"Savings & gold", me:"Me", nour:"Nour", tobuy:"To-buy list", friends:"Friends outings" };
+const MISSING = new Set();
+function lang(){ return (state && state.settings && state.settings.lang) || localStorage.getItem("mizan.lang") || "en"; }
+function t(s, v){
+  let r = s;
+  if(lang()==="ar"){ if(AR[s]!=null) r = AR[s]; else MISSING.add(s); }
+  if(v) r = r.replace(/\{(\w+)\}/g, (m,k)=> v[k]!=null ? v[k] : m);
+  return r;
+}
+function tr(s){ return (lang()==="ar" && AR[s]!=null) ? AR[s] : s; }
+function applyLang(){
+  const ar = lang()==="ar";
+  document.documentElement.lang = ar ? "ar" : "en";
+  document.documentElement.dir = ar ? "rtl" : "ltr";
+  document.querySelectorAll("[data-t]").forEach(e=>e.textContent = t(e.dataset.t));
+  document.querySelectorAll("[data-ic]").forEach(e=>{ if(!e.firstChild) e.innerHTML = ic(e.dataset.ic); });
+}
+
+/* ================= storage & crypto ================= */
+const KEY_ENC = "mizan.enc.v1", KEY_PLAIN = "mizan.v1", KEY_FAILS = "mizan.fails";
+const ITER = 250000;
+const UNDO_MS = 10*60*1000;     // money-in entries can be undone for 10 minutes after saving
+let state = null, cryptoKey = null, meta = null;
+let saveChain = Promise.resolve();
+
+const DEFAULTS = () => ({
+  version: 3,
+  settings: {
+    lang: localStorage.getItem("mizan.lang") || "en",
+    rounding: 5, lockMinutes: 2,
+    gold: { every: 500, buy: 250 },
+    goldPrice: null,
+    nisab: { grams: 85, karat: 21 },
+    sources: [],
+    sourceRules: {},
+    pots: [
+      { id:"sadaqah", pct:10, base:"gross", color:"#e8c46a", core:true },
+      { id:"savings", pct:20, base:"gross", color:"#6fa3ec", core:true },
+      { id:"me",      pct:70, base:"rest",  color:"#5fcf9c", core:true }
+    ]
+  },
+  incomes: [], spends: [], moves: [], gold: [], wishes: [], loans: [],
+  zakat: { hawlStart: null },
+  presetsCleared: true
+});
+function migrate(s){
+  const d = DEFAULTS();
+  for(const k of ["incomes","spends","moves","gold","wishes","loans"]) if(!Array.isArray(s[k])) s[k] = [];
+  s.settings = Object.assign({}, d.settings, s.settings || {});
+  for(const k of ["gold","nisab","sourceRules"]) if(!s.settings[k]) s.settings[k] = d.settings[k];
+  if(!s.zakat) s.zakat = { hawlStart: null };
+  s.settings.pots.forEach(p=>{ if(POT_NAMES[p.id] && !p.custom && p.name===POT_NAMES[p.id]) delete p.name; if(!POT_NAMES[p.id]) p.custom = true; });
+  s.wishes.forEach(w=>{ if(!w.pot) w.pot = "me"; });
+  const CMAP = {"#b0843a":"#e8c46a","#3b6aa8":"#6fa3ec","#2f7a5c":"#5fcf9c","#b8557c":"#ee7fab","#7a5cae":"#ad8ff0","#d0693b":"#f39a62",
+    "#4f8a8b":"#6cc6c7","#8a6d3b":"#d6a85f","#5b7fbd":"#8fb0f0","#a0527a":"#e48ab7","#6b8e23":"#a8d060","#c0673a":"#f0935a"};
+  s.settings.pots.forEach(p=>{ if(CMAP[p.color]) p.color = CMAP[p.color]; });
+  s.version = 4;
+  return s;
+}
+const enc = new TextEncoder(), dec = new TextDecoder();
+const b64 = u8 => btoa(String.fromCharCode(...u8));
+const unb64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+async function deriveKey(pin, salt, iter){
+  const base = await crypto.subtle.importKey("raw", enc.encode(pin), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
+}
+async function sealWith(key, m, obj){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, enc.encode(JSON.stringify(obj))));
+  return { app:"mizan", v:1, salt:b64(m.salt), iter:m.iter, len:m.len, iv:b64(iv), ct:b64(ct) };
+}
+async function openWith(key, blob){
+  const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:unb64(blob.iv)}, key, unb64(blob.ct));
+  return JSON.parse(dec.decode(pt));
+}
+function save(){
+  if(!cryptoKey || !state) return;
+  const snapshot = JSON.parse(JSON.stringify(state)), key = cryptoKey, m = meta;
+  saveChain = saveChain.then(async ()=>{
+    try{ localStorage.setItem(KEY_ENC, JSON.stringify(await sealWith(key, m, snapshot))); }
+    catch(e){ toast(t("Couldn't save. Export a backup now.")); }
+  });
+  return saveChain;
+}
+function readBlob(){ try{ const r = localStorage.getItem(KEY_ENC); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function hasLegacy(){ try{ return !!localStorage.getItem(KEY_PLAIN); }catch(e){ return false; } }
+if(navigator.storage && navigator.storage.persist){ try{ navigator.storage.persist(); }catch(e){} }
+
+/* ================= one-time: remove old preset pots & sources ================= */
+const PRESET_SOURCES = ["Grandmother","Dad","Aunt","Family","Eidiya","Premiere event","Other"];
+const PRESET_POTS = ["nour","tobuy","friends"];
+function adopt(s){
+  state = migrate(s);
+  if(state.presetsCleared) return;
+  const b = balances(), me = state.settings.pots.find(p=>p.id==="me");
+  for(const id of PRESET_POTS){
+    const p = state.settings.pots.find(x=>x.id===id); if(!p) continue;
+    if(Math.abs(b[id]||0) > 0.001) state.moves.push({id:uid(), date:today(), from:id, to:"me", amount:r2(b[id]), note:""});
+    if(me) me.pct = r2(me.pct + (p.pct||0));
+    state.removedPots = (state.removedPots||[]).concat([{id, name:POT_NAMES[id], color:p.color, icon:POT_ICON[id], custom:true}]);
+    state.settings.pots = state.settings.pots.filter(x=>x.id!==id);
+    state.wishes.forEach(w=>{ if(w.pot===id && !w.bought) w.pot = "me"; });
+    for(const k in state.settings.sourceRules) delete state.settings.sourceRules[k][id];
+  }
+  state.settings.sources = state.settings.sources.filter(x=>!PRESET_SOURCES.includes(x));
+  for(const k of PRESET_SOURCES) delete state.settings.sourceRules[k];
+  state.presetsCleared = true;
+  save();
+}
+
+/* ================= helpers ================= */
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function today(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
+function addDays(s,n){ const d=new Date(s+"T12:00:00"); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+function daysBetween(a,b){ return Math.round((new Date(b+"T12:00:00") - new Date(a+"T12:00:00"))/86400000); }
+function r2(x){ return Math.round(x*100)/100; }
+function fmt(x){ return r2(x).toLocaleString("en-US",{maximumFractionDigits:2}); }
+function egp(x){ return fmt(x) + " " + t("EGP"); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function loc(){ return lang()==="ar" ? "ar-EG-u-nu-latn" : "en-GB"; }
+function niceDate(s){ return new Date(s+"T12:00:00").toLocaleDateString(loc(),{day:"numeric",month:"short",year:"numeric"}); }
+function monthKey(s){ return s.slice(0,7); }
+function monthName(k){ return new Date(k+"-15T12:00:00").toLocaleDateString(loc(),{month:"long",year:"numeric"}); }
+function shiftMonth(k,n){ const d=new Date(k+"-15T12:00:00"); d.setMonth(d.getMonth()+n); return d.toISOString().slice(0,7); }
+function num(v){ const n=parseFloat(String(v).replace(/,/g,"").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d))); return isFinite(n)?n:0; }
+function pot(id){ return state.settings.pots.find(p=>p.id===id) || (state.removedPots||[]).find(p=>p.id===id) || {id, name:id, color:"#888", pct:0, base:"rest", custom:true}; }
+function potName(p){ if(typeof p==="string") p = pot(p); return (p.custom || !POT_NAMES[p.id]) ? (p.name||p.id) : t(POT_NAMES[p.id]); }
+function $(s){ return document.querySelector(s); }
+let toastT;
+function toast(msg){ const e=$("#toast"); e.textContent=msg; e.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>e.classList.remove("on"),2600); }
+
+/* ================= fun: count-up & particles ================= */
+function countUp(el){
+  const to = +el.dataset.count, from = heroShown==null ? 0 : heroShown;
+  heroShown = to;
+  if(from===to || matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = egp(to); return; }
+  const t0 = performance.now(), dur = 900;
+  (function step(now){ const k = Math.min(1,(now-t0)/dur), e = 1-Math.pow(1-k,3); el.textContent = egp(Math.round(from+(to-from)*e)); if(k<1 && el.isConnected) requestAnimationFrame(step); else el.textContent = egp(to); })(t0);
+}
+function burst(kind){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = $("#fx"), ctx = cv.getContext("2d"), dpr = window.devicePixelRatio||1, W = innerWidth, H = innerHeight;
+  cv.width = W*dpr; cv.height = H*dpr; cv.style.width = W+"px"; cv.style.height = H+"px"; ctx.setTransform(dpr,0,0,dpr,0,0);
+  const cols = kind==="coins" ? ["#f3d98b","#d9b45a","#b8892b"] : ["#d9b45a","#f3d98b","#6fa3ec","#ee7fab","#5fcf9c","#ad8ff0"];
+  const P = Array.from({length: kind==="coins"?46:90}, ()=>({ x: W/2 + (Math.random()-.5)*W*.5, y: kind==="coins" ? -20-Math.random()*H*.4 : H*.45,
+    vx: (Math.random()-.5)*(kind==="coins"?2:11), vy: kind==="coins" ? 2+Math.random()*3 : -6-Math.random()*8, r: kind==="coins"?7+Math.random()*6:4+Math.random()*4,
+    rot: Math.random()*6, vr:(Math.random()-.5)*.3, c: cols[Math.floor(Math.random()*cols.length)] }));
+  const t0 = performance.now();
+  (function frame(now){
+    const el = now-t0; ctx.clearRect(0,0,W,H);
+    for(const p of P){ p.vy += kind==="coins"?.12:.28; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.max(0, 1-el/1900);
+      if(kind==="coins"){ ctx.scale(Math.abs(Math.cos(p.rot*2))*.8+.2,1); ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(0,0,p.r,0,7); ctx.fill(); ctx.strokeStyle="rgba(120,80,10,.55)"; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(0,0,p.r*.62,0,7); ctx.stroke(); }
+      else { ctx.fillStyle=p.c; ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); }
+      ctx.restore(); }
+    if(el<1900) requestAnimationFrame(frame); else { ctx.clearRect(0,0,W,H); cv.width=0; cv.height=0; }
+  })(t0);
+}
+
+/* ================= undo window ================= */
+function undoLeft(inc){                       // ms left to undo; 0 means final
+  if(!inc || !inc.createdAt) return 0;
+  const age = Date.now() - inc.createdAt;
+  if(age < 0) return 0;                       // clock moved back: treat as final
+  return Math.max(0, UNDO_MS - age);
+}
+function mmss(ms){ const s=Math.ceil(ms/1000); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+function undoable(){ return state.incomes.filter(i=>undoLeft(i)>0).sort((a,b)=>b.createdAt-a.createdAt); }
+setInterval(()=>{
+  if(!state) return;
+  let expired = false;
+  document.querySelectorAll("[data-undo]").forEach(el=>{
+    const inc = state.incomes.find(i=>i.id===el.dataset.undo), left = undoLeft(inc);
+    if(left<=0) expired = true; else el.textContent = mmss(left);
+  });
+  if(expired && !$("#sheetBg").classList.contains("on") && view!=="add") render();
+}, 1000);
+
+/* ================= split engine ================= */
+function pctsFor(source){
+  const rule = source && state.settings.sourceRules[source];
+  const out = {}; state.settings.pots.forEach(p=> out[p.id] = rule ? (num(rule[p.id])||0) : p.pct);
+  return out;
+}
+function computeSplit(amount, earmark, source, sadPct){
+  const S = state.settings, r = S.rounding || 1, pots = S.pots, pc = pctsFor(source);
+  if(sadPct!=null && sadPct>pc.sadaqah) pc.sadaqah = sadPct;   // extra sadaqah for this entry only
+  const out = {}; pots.forEach(p=>out[p.id]=0);
+  if(!(amount>0)) return { split: out, ear: 0, capped: false };
+  const up = x=>Math.ceil(x/r-1e-9)*r, near = x=>Math.round(x/r)*r, down = x=>Math.floor(x/r+1e-9)*r;
+  let left = amount;
+  for(const p of pots.filter(p=>p.base==="gross")){
+    let v = p.id==="sadaqah" ? up(amount*pc[p.id]/100) : near(amount*pc[p.id]/100);
+    v = Math.max(0, Math.min(v, left)); out[p.id] = v; left -= v;
+  }
+  let ear = 0;
+  if(earmark && earmark.pot && earmark.amount>0 && out.hasOwnProperty(earmark.pot)){ ear = Math.min(earmark.amount, left); out[earmark.pot] += ear; left -= ear; }
+  const flex = pots.filter(p=>p.base==="rest"), tot = flex.reduce((s,p)=>s+pc[p.id],0), pool = left;
+  for(const p of flex){ if(p.id==="me") continue; const v = tot ? Math.max(0, Math.min(down(pool*pc[p.id]/tot), left)) : 0; out[p.id] += v; left -= v; }
+  out.me = (out.me||0) + left;
+  for(const k in out) out[k] = r2(out[k]);
+  return { split: out, ear: r2(ear), capped: !!(earmark && earmark.amount>ear+1e-9) };
+}
+
+/* ================= balances & derived numbers ================= */
+function loanPaid(l){ return (l.pays||[]).reduce((s,p)=>s+p.amount,0); }
+function balances(){
+  const b = {}; state.settings.pots.forEach(p=>b[p.id]=0);
+  const add=(k,v)=>{ b[k]=(b[k]||0)+v; };
+  state.incomes.forEach(i=>{ for(const k in i.split) add(k, i.split[k]); });
+  state.spends.forEach(s=>add(s.pot, -s.amount));
+  state.moves.forEach(m=>{ add(m.from,-m.amount); add(m.to,m.amount); });
+  state.gold.forEach(g=>add("savings", -g.egp));
+  state.loans.forEach(l=>{ const sg = l.dir==="lent" ? -1 : 1; add(l.pot, sg*l.amount); add(l.pot, -sg*loanPaid(l)); });
+  for(const k in b) b[k]=r2(b[k]);
+  return b;
+}
+function goldStatus(){
+  const G = state.settings.gold;
+  const savedEver = state.incomes.reduce((s,i)=>s+(i.split.savings||0),0) + state.moves.filter(m=>m.to==="savings").reduce((s,m)=>s+m.amount,0);
+  const bought = state.gold.reduce((s,g)=>s+g.egp,0);
+  const dueTotal = Math.floor(savedEver/G.every + 1e-9)*G.buy;
+  const cash = balances().savings;
+  return { savedEver:r2(savedEver), bought:r2(bought), due:r2(Math.max(0, Math.min(dueTotal-bought, cash))), toNext:r2(G.every - (savedEver % G.every)), cash:r2(cash) };
+}
+function perGram(karat){ const gp = state.settings.goldPrice; return gp && gp.p21>0 ? gp.p21*(karat||21)/21 : 0; }
+function goldValue(){
+  let value=0, paid=0, unknown=0;
+  state.gold.forEach(g=>{ paid+=g.egp; if(g.grams>0) value += g.grams*perGram(g.karat||21); else { unknown++; value += g.egp; } });
+  const hasPrice = perGram(21)>0;
+  return { value: hasPrice ? r2(value) : null, paid:r2(paid), unknown, hasPrice };
+}
+function loanTotals(){
+  let owedToMe=0, iOwe=0;
+  state.loans.forEach(l=>{ const left = l.amount - loanPaid(l); if(left<=0.001) return; if(l.dir==="lent") owedToMe+=left; else iOwe+=left; });
+  return { owedToMe:r2(owedToMe), iOwe:r2(iOwe) };
+}
+function zakatStatus(){
+  const N = state.settings.nisab, pg = perGram(N.karat);
+  if(!(pg>0)) return { needPrice:true };
+  const b = balances(), gv = goldValue();
+  let cash = 0; for(const k in b) if(k!=="sadaqah") cash += b[k];
+  const wealth = r2(Math.max(0,cash) + (gv.value||0)), nisab = r2(N.grams*pg), above = wealth >= nisab;
+  const hs = state.zakat.hawlStart, dueDate = hs ? addDays(hs, 354) : null;
+  return { wealth, nisab, above, hawlStart:hs, dueDate, due: !!(above && dueDate && today() >= dueDate), daysLeft: dueDate ? daysBetween(today(), dueDate) : null, amount: Math.ceil(wealth*0.025) };
+}
+function ensureHawl(){ const z = zakatStatus(); if(!z.needPrice && z.above && !state.zakat.hawlStart){ state.zakat.hawlStart = today(); save(); } }
+function inflowPerDay(potId){
+  if(!state.incomes.length) return 0;
+  const first = state.incomes.map(i=>i.date).sort()[0];
+  const from = addDays(today(), -90) > first ? addDays(today(), -90) : first;
+  let sum = 0;
+  state.incomes.forEach(i=>{ if(i.date>=from) sum += (i.split[potId]||0); });
+  state.moves.forEach(m=>{ if(m.date>=from){ if(m.to===potId) sum+=m.amount; if(m.from===potId) sum-=m.amount; } });
+  return Math.max(0, sum/Math.max(30, daysBetween(from, today())+1));
+}
+
+/* ================= routing ================= */
+let view = "home", lastPlan = null, histFilter = "all", reportMonth = null;
+let addDraft = { amount:"", source:null, date:today(), note:"", earPot:"", earAmt:"", sadPct:null };
+const MORE_VIEWS = ["more","report","history","loans","gold","settings"];
+let animNext = false, heroShown = null;
+function go(v){ view=v; animNext=true; render(); window.scrollTo(0,0); }
+function render(){
+  if(!state) return;
+  document.body.classList.remove("locked");
+  applyLang();
+  document.querySelectorAll(".tab").forEach(tb=>tb.classList.toggle("on", tb.dataset.v===view || (view==="plan"&&tb.dataset.v==="add") || (MORE_VIEWS.includes(view)&&tb.dataset.v==="more")));
+  const V = {home:vHome, add:vAdd, plan:vPlan, report:vReport, goals:vGoals, more:vMore, history:vHistory, loans:vLoans, gold:vGold, settings:vSettings};
+  const app = $("#app");
+  app.innerHTML = (V[view]||vHome)();
+  if(animNext && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    animNext = false; app.classList.remove("enter"); void app.offsetWidth; app.classList.add("enter");
+    let i=0; app.querySelectorAll(":scope > *, .rows > *").forEach(el=>{ el.style.animationDelay = Math.min(i++*35, 420)+"ms"; });
+    clearTimeout(render._t); render._t = setTimeout(()=>app.classList.remove("enter"), 1100);
+  } else animNext = false;
+  if(view==="add") bindAdd();
+  const hb = app.querySelector("[data-count]"); if(hb) countUp(hb);
+}
+function pageTop(title){ return `<div class="top" style="justify-content:flex-start;margin-bottom:14px"><button class="iconbtn" aria-label="${esc(t("Back"))}" onclick="go('more')">${ic("back","flip")}</button><h1 style="margin:0">${title}</h1></div>`; }
+function rowLink(icon, color, title, sub, onclick, value){
+  return `<button class="row" onclick="${onclick}"><span class="bubble" style="--c:${color}">${ic(icon)}</span><span class="grow"><div class="t">${title}</div>${sub?`<div class="m">${sub}</div>`:""}</span>${value?`<span class="v num">${value}</span>`:""}${ic("chev","chev flip")}</button>`;
+}
+
+/* ================= HOME ================= */
+function vHome(){
+  ensureHawl();
+  const b = balances(), g = goldStatus(), z = zakatStatus();
+  let h = `<div class="top"><h1>${t("Mizan")}</h1><button class="iconbtn" aria-label="${esc(t("Lock"))}" onclick="lockApp()">${ic("lock")}</button></div>
+  <div class="card hero"><div class="label">${t("Yours to spend")}</div><div class="big num" data-count="${b.me||0}">${egp(heroShown==null?0:heroShown)}</div></div>`;
+  const u = undoable()[0];
+  if(u) h += `<div class="undo-strip">${ic("clock")}<span class="grow">${t("Added {x} from {s}",{x:egp(u.amount), s:esc(tr(u.source))})} · <span class="timer" data-undo="${u.id}">${mmss(undoLeft(u))}</span></span><button class="btn small ghost" onclick="undoIncome('${u.id}')">${t("Undo")}</button></div>`;
+  const todo = [];
+  if(z.due) todo.push(`<div class="row static"><span class="bubble" style="--c:var(--danger)">${ic("shield")}</span><span class="grow"><div class="t">${t("Pay zakat")}</div><div class="m num">${egp(z.amount)}</div></span><button class="btn small" onclick="go('gold')">${t("Open")}</button></div>`);
+  if((b.sadaqah||0)>0) todo.push(`<div class="row static"><span class="bubble" style="--c:${pot("sadaqah").color}">${ic("moon")}</span><span class="grow"><div class="t">${t("Give sadaqah")}</div><div class="m num">${egp(b.sadaqah)}</div></span><button class="btn small" onclick="sheetSpend('sadaqah')">${t("Done")}</button></div>`);
+  if(g.due>0) todo.push(`<div class="row static"><span class="bubble" style="--c:#d9b45a">${ic("gold")}</span><span class="grow"><div class="t">${t("Buy gold")}</div><div class="m num">${egp(g.due)}</div></span><button class="btn small" onclick="sheetGold()">${t("Done")}</button></div>`);
+  if(todo.length) h += `<h2>${t("To do")}</h2><div class="rows">${todo.join("")}</div>`;
+  h += `<h2>${t("Your pots")}</h2><div class="rows">`;
+  for(const p of state.settings.pots){ if(p.id==="me") continue;
+    const v = b[p.id]||0;
+    h += `<button class="row" onclick="sheetPot('${p.id}')">${bubble(p)}<span class="grow"><div class="t">${esc(potName(p))}</div></span><span class="v num" style="${v<0?"color:var(--danger)":""}">${egp(v)}</span>${ic("chev","chev flip")}</button>`;
+  }
+  h += `<button class="row addrow" onclick="sheetPotForm()"><span class="bubble dash">${ic("plus")}</span><span class="grow"><div class="t">${t("Add a pot")}</div>${state.settings.pots.length<=3?`<div class="m">${t("e.g. Nour, things to buy, outings")}</div>`:""}</span></button>`;
+  h += `</div><div class="two" style="margin-top:14px"><button class="btn" onclick="go('add')">${ic("plus")} ${t("Money in")}</button><button class="btn ghost" onclick="sheetSpend()">${ic("minus")} ${t("Money out")}</button></div>`;
+  if(!state.incomes.length) h += `<div class="note" style="text-align:center;margin-top:16px">${t("Got money? Tap “Money in” and Mizan splits it for you.")}</div>`;
+  return h;
+}
+
+/* ================= ADD ================= */
+function vAdd(){
+  const S = state.settings, d = addDraft, flexPots = S.pots.filter(p=>p.base==="rest");
+  return `<h1>${t("Money in")}</h1>
+  <input id="aAmt" class="amount num" inputmode="decimal" placeholder="0" value="${esc(d.amount)}" autocomplete="off" aria-label="${esc(t("Amount"))}">
+  <label class="f">${t("From")}</label>
+  <div class="chips" id="aSrc">${S.sources.map((s,i)=>`<button class="chip ${d.source===s?"on":""}" data-i="${i}">${esc(tr(s))}${S.sourceRules[s]?" ★":""}</button>`).join("")}<button class="chip addchip" onclick="sheetSource()">${ic("plus")} ${S.sources.length?t("Add"):t("Add a source")}</button></div>
+  ${S.sources.length?"":`<div class="note">${t("Where does your money come from? e.g. Dad, Eidiya, an event.")}</div>`}
+  <div class="step" id="aSad"><span style="color:${pot("sadaqah").color};display:flex">${ic("moon")}</span><span class="grow"><div style="font-weight:600">${t("Sadaqah this time")}</div><div class="sub" id="aSadAmt"></div></span>
+    <button class="sb" id="aSadMinus" aria-label="-">−</button><span class="pv num" id="aSadPct"></span><button class="sb" id="aSadPlus" aria-label="+">+</button></div>
+  <div id="aSadWarn"></div>
+  <div id="aPreview" style="margin-top:12px"></div>
+  <details class="link" ${d.earAmt||d.note?"open":""} style="margin-top:6px"><summary>+ ${t("Keep some for something specific")}</summary>
+    <div class="two"><select id="aEarPot"><option value="">${t("For…")}</option>${flexPots.map(p=>`<option value="${p.id}" ${d.earPot===p.id?"selected":""}>${esc(potName(p))}</option>`).join("")}</select>
+      <input id="aEarAmt" inputmode="decimal" placeholder="${esc(t("Amount"))}" value="${esc(d.earAmt)}"></div>
+    <div class="note">${t("Sadaqah and savings are taken first.")}</div>
+    <label class="f">${t("Note")}</label><input id="aNote" value="${esc(d.note)}">
+    <label class="f">${t("Date")}</label><input id="aDate" type="date" value="${esc(d.date)}">
+  </details>
+  <button class="btn block" id="aSave" style="margin-top:14px" disabled></button>`;
+}
+function bindAdd(){
+  const amt=$("#aAmt"), earPot=$("#aEarPot"), earAmt=$("#aEarAmt"), note=$("#aNote"), date=$("#aDate");
+  const sync=()=>{ addDraft.amount=amt.value; addDraft.earPot=earPot.value; addDraft.earAmt=earAmt.value; addDraft.note=note.value; addDraft.date=date.value||today(); preview(); };
+  [amt,earPot,earAmt,note,date].forEach(e=>{ e.addEventListener("input",sync); e.addEventListener("change",sync); });
+  document.querySelectorAll("#aSrc .chip[data-i]").forEach(c=>c.onclick=()=>{ addDraft.source=state.settings.sources[+c.dataset.i]; document.querySelectorAll("#aSrc .chip[data-i]").forEach(x=>x.classList.toggle("on",x===c)); preview(); });
+  $("#aSave").onclick=saveIncome;
+  $("#aSadPlus").onclick=()=>{ addDraft.sadPct = Math.min(100, sadNow()+5); preview(true); };
+  $("#aSadMinus").onclick=()=>{ const b=sadBase(); addDraft.sadPct = Math.max(b, sadNow()-5); if(addDraft.sadPct<=b) addDraft.sadPct=null; preview(true); };
+  preview();
+  if(!addDraft.amount) setTimeout(()=>amt.focus(),50);
+}
+function sadBase(){ return pctsFor(addDraft.source).sadaqah; }
+function sadNow(){ const b=sadBase(); return addDraft.sadPct!=null && addDraft.sadPct>b ? addDraft.sadPct : b; }
+function draftEarmark(){ const a=num(addDraft.earAmt); return (addDraft.earPot && a>0) ? {pot:addDraft.earPot, amount:a} : null; }
+function preview(bump){
+  const a = num(addDraft.amount), box=$("#aPreview"), btn=$("#aSave");
+  const base = sadBase(); if(addDraft.sadPct!=null && addDraft.sadPct<=base) addDraft.sadPct=null;
+  const sp = sadNow(), extra = sp>base;
+  $("#aSadPct").textContent = sp+"%"; $("#aSadMinus").disabled = !extra;
+  $("#aSad").classList.toggle("up", extra); if(bump){ const e=$("#aSadPct"); e.style.animation="none"; void e.offsetWidth; e.style.animation="pop .3s"; }
+  btn.disabled = !(a>0) || !addDraft.source;
+  btn.textContent = !(a>0) ? t("Type the amount") : (!addDraft.source ? t("Who is it from?") : t("Save"));
+  const normal = a>0 ? computeSplit(a, null, addDraft.source).split.sadaqah : 0;
+  const ear = draftEarmark(), {split, ear:e, capped} = computeSplit(a, ear, addDraft.source, extra?sp:null);
+  $("#aSadAmt").textContent = a>0 ? egp(split.sadaqah) : t("Normal: {p}%",{p:base});
+  $("#aSadWarn").innerHTML = extra ? `<div class="card warn" style="margin-top:10px;display:flex;gap:10px;align-items:flex-start">${ic("moon")}<div><b>${t("Extra sadaqah this time")}</b><div style="font-size:14px;margin-top:2px">${a>0?t("{x} instead of {y}. The other pots get less from this money only. Next time it's back to {p}%.",{x:egp(split.sadaqah), y:egp(normal), p:base}):t("Only this money is affected. Next time it's back to {p}%.",{p:base})}</div></div></div>` : "";
+  if(!(a>0)){ box.innerHTML=""; return; }
+  box.innerHTML = `<div class="card">${splitBar(split,a)}${splitList(split, ear?{pot:ear.pot,amount:e}:null)}
+    ${addDraft.source && state.settings.sourceRules[addDraft.source] ? `<div class="note" style="margin-inline:0">★ ${t("Special split for {s}",{s:esc(tr(addDraft.source))})}</div>`:""}
+    ${capped?`<div class="note" style="margin-inline:0;color:var(--danger)">${t("Only {x} could be kept aside.",{x:egp(e)})}</div>`:""}</div>`;
+}
+function splitBar(split,total){ return `<div class="bar">${state.settings.pots.filter(p=>split[p.id]>0).map(p=>`<span style="background:${p.color};width:${split[p.id]/total*100}%"></span>`).join("")}</div>`; }
+function splitList(split, ear){
+  return state.settings.pots.filter(p=>split[p.id]>0).map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0">
+    <span style="color:${p.color};display:flex">${ic(potIcon(p))}</span><span style="flex:1">${esc(potName(p))}${ear&&ear.pot===p.id&&ear.amount>0?` <span class="sub">(${t("incl. {x}",{x:fmt(ear.amount)})})</span>`:""}</span><b class="num">${egp(split[p.id])}</b></div>`).join("");
+}
+function saveIncome(){
+  const a = num(addDraft.amount); if(!(a>0) || !addDraft.source) return;
+  const extra = sadNow()>sadBase() ? sadNow() : null;
+  const ear = draftEarmark(), res = computeSplit(a, ear, addDraft.source, extra);
+  const inc = { id:uid(), createdAt:Date.now(), date:addDraft.date||today(), source:addDraft.source, amount:r2(a), note:addDraft.note.trim(), split:res.split, earmark: ear?{pot:ear.pot, amount:res.ear}:null, sadPct: extra };
+  state.incomes.push(inc); save();
+  lastPlan = inc.id;
+  addDraft = { amount:"", source:null, date:today(), note:"", earPot:"", earAmt:"", sadPct:null };
+  go("plan"); setTimeout(()=>burst("coins"), 120);
+}
+function undoIncome(id){
+  const inc = state.incomes.find(i=>i.id===id);
+  if(!inc) return;
+  if(undoLeft(inc)<=0){ toast(t("Too late — this entry is final now.")); return render(); }
+  if(!confirm(t("Undo {x} from {s}? You can enter it again.",{x:egp(inc.amount), s:tr(inc.source)}))) return;
+  if(undoLeft(inc)<=0){ toast(t("Too late — this entry is final now.")); return render(); }
+  state.incomes = state.incomes.filter(i=>i.id!==id); save(); toast(t("Undone.")); go("home");
+}
+
+/* ================= PLAN ================= */
+function vPlan(){
+  const inc = state.incomes.find(i=>i.id===lastPlan);
+  if(!inc) return vHome();
+  const g = goldStatus(), s = inc.split, b = balances();
+  const rows = state.settings.pots.filter(p=>s[p.id]>0).map(p=>{
+    const v = s[p.id]; let ti, m = "";
+    if(p.id==="sadaqah"){ ti = t("Give {x} as sadaqah",{x:egp(v)}); if(inc.sadPct) m = t("Extra sadaqah this time ({p}%)",{p:inc.sadPct}); }
+    else if(p.id==="savings"){ ti = t("Save {x}",{x:egp(v)}); if(g.due>0) m = t("Now buy gold for {x}",{x:egp(g.due)}); }
+    else if(p.id==="me") ti = t("{x} is yours",{x:egp(v)});
+    else { ti = t("{x} for {p}",{x:egp(v), p:esc(potName(p))});
+      const next = state.wishes.filter(w=>!w.bought && w.pot===p.id)[0];
+      if(next && b[p.id]>=next.price) m = t("You can buy “{n}” now",{n:esc(next.name)}); }
+    return `<div class="row static">${bubble(p)}<span class="grow"><div class="t">${ti}</div>${m?`<div class="m">${m}</div>`:""}</span></div>`;
+  }).join("");
+  const left = undoLeft(inc);
+  return `<h1>${t("Your plan")}</h1><div class="sub" style="margin:-8px 4px 14px">${t("{x} from {s}",{x:egp(inc.amount), s:esc(tr(inc.source))})}</div>
+  <div class="rows">${rows}</div>
+  ${g.due>0?`<button class="btn block" style="margin-top:12px" onclick="sheetGold()">${ic("gold")} ${t("I bought the gold")}</button>`:""}
+  <div class="two" style="margin-top:12px">
+    ${left>0?`<button class="btn ghost" onclick="undoIncome('${inc.id}')">${ic("undo")} ${t("Undo")} <span class="timer" data-undo="${inc.id}">${mmss(left)}</span></button>`:""}
+    <button class="btn" onclick="go('home')">${ic("check")} ${t("Done")}</button></div>
+  ${left>0?`<div class="note" style="text-align:center">${t("Made a mistake? You can undo for 10 minutes. After that it's final.")}</div>`:""}`;
+}
+
+/* ================= GOALS ================= */
+function goalStatus(w, b){
+  const open = state.wishes.filter(x=>!x.bought && x.pot===w.pot);
+  let cum = 0; for(const x of open){ cum += x.price; if(x.id===w.id) break; }
+  const bal = Math.max(0, b[w.pot]||0);
+  const covered = Math.max(0, Math.min(w.price, bal - (cum - w.price)));
+  const remaining = r2(Math.max(0, cum - bal));
+  const res = { covered, remaining, pct: w.price>0 ? covered/w.price*100 : 100 };
+  if(remaining<=0){ res.kind="ready"; return res; }
+  const rate = inflowPerDay(w.pot);
+  res.eta = rate>0 ? addDays(today(), Math.ceil(remaining/rate)) : null;
+  if(!w.due){ res.kind="nodate"; return res; }
+  const daysLeft = daysBetween(today(), w.due);
+  if(daysLeft<0){ res.kind="late"; return res; }
+  if(res.eta && res.eta<=w.due){ res.kind="ontrack"; return res; }
+  res.kind="behind"; res.extra = Math.ceil(Math.max(0, remaining/(Math.max(daysLeft,1)/30.4) - rate*30.4)/5)*5;
+  return res;
+}
+function vGoals(){
+  const b = balances(), open = state.wishes.filter(w=>!w.bought), done = state.wishes.filter(w=>w.bought);
+  const items = [];
+  for(const p of state.settings.pots){
+    open.filter(w=>w.pot===p.id).forEach(w=>{
+      const st = goalStatus(w,b);
+      let tag = "", line = "";
+      if(st.kind==="ready") tag = `<span class="tag">${t("Ready")}</span>`;
+      else if(st.kind==="ontrack") tag = `<span class="tag">${t("On track")}</span>`;
+      else if(st.kind==="behind"){ tag = `<span class="tag warn">${t("Behind")}</span>`; line = st.extra>0 ? t("Add about {x} a month to make it.",{x:egp(st.extra)}) : ""; }
+      else if(st.kind==="late") tag = `<span class="tag bad">${t("Date passed")}</span>`;
+      const sub = [esc(potName(p)), w.due?t("by {d}",{d:niceDate(w.due)}):"", st.kind==="ready"?"":t("{x} to go",{x:egp(w.price-st.covered)})].filter(Boolean).join(" · ");
+      items.push(`<div class="card" style="--c:${p.color}"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div style="min-width:0"><div style="font-weight:650">${esc(w.name)} ${tag}</div><div class="sub">${sub}</div></div>
+        <b class="num" style="white-space:nowrap">${egp(w.price)}</b></div>
+        <div class="prog"><span style="width:${st.pct}%"></span></div>
+        ${line?`<div class="note" style="margin-inline:0">${line}</div>`:""}
+        <div class="two" style="margin-top:12px"><button class="btn small ${st.kind==="ready"?"":"ghost"}" onclick="sheetBuyWish('${w.id}')">${ic("check")} ${t("Bought")}</button><button class="btn small ghost" onclick="sheetWish('${w.id}')">${ic("edit")} ${t("Edit")}</button></div></div>`);
+    });
+  }
+  return `<div class="top"><h1>${t("Goals")}</h1><button class="btn small" onclick="sheetWish()">${ic("plus")} ${t("New")}</button></div>
+  ${items.length ? items.join("") : `<div class="card empty"><span style="color:var(--muted)">${ic("target")}</span><div style="margin-top:8px">${t("Add something you want to buy. Mizan tells you when you can afford it.")}</div></div>`}
+  ${done.length?`<h2>${t("Bought")}</h2><div class="rows">${done.slice().reverse().map(w=>`<div class="row static"><span class="grow"><div class="t">${esc(w.name)}</div><div class="m">${w.boughtDate?niceDate(w.boughtDate):""}</div></span><span class="v num">${egp(w.paid||w.price)}</span></div>`).join("")}</div>`:""}`;
+}
+
+/* ================= MORE ================= */
+function vMore(){
+  const lt = loanTotals(), gv = goldValue();
+  return `<h1>${t("More")}</h1>
+  <div class="rows">
+    ${rowLink("chart","#6fa3ec",t("Monthly report"),"","go('report')")}
+    ${rowLink("gold","#d9b45a",t("Gold & zakat"), gv.hasPrice&&state.gold.length?t("Gold worth {x}",{x:egp(gv.value)}):"", "go('gold')")}
+    ${rowLink("swap","#f39a62",t("Loans"), lt.owedToMe||lt.iOwe ? t("Owed to you {a} · You owe {b}",{a:fmt(lt.owedToMe), b:fmt(lt.iOwe)}) : "", "go('loans')")}
+    ${rowLink("clock","#9a948a",t("History"),"","go('history')")}
+    ${rowLink("sliders","#9a948a",t("Settings"),"","go('settings')")}
+  </div>
+  <button class="btn block ghost" style="margin-top:14px" onclick="lockApp()">${ic("lock")} ${t("Lock")}</button>`;
+}
+
+/* ================= REPORT ================= */
+function monthStats(mk){
+  const inc = state.incomes.filter(i=>monthKey(i.date)===mk);
+  const bySrc = {}; inc.forEach(i=>bySrc[i.source]=(bySrc[i.source]||0)+i.amount);
+  const byPot = {}; let gave=0, zakat=0, spent=0;
+  state.spends.filter(s=>monthKey(s.date)===mk).forEach(s=>{ if(s.type==="reset") return; if(s.type==="give") gave+=s.amount; else if(s.type==="zakat") zakat+=s.amount; else { spent+=s.amount; byPot[s.pot]=(byPot[s.pot]||0)+s.amount; } });
+  let saved = inc.reduce((a,i)=>a+(i.split.savings||0),0);
+  state.moves.filter(m=>monthKey(m.date)===mk).forEach(m=>{ if(m.to==="savings") saved+=m.amount; if(m.from==="savings") saved-=m.amount; });
+  const gold = state.gold.filter(g=>monthKey(g.date)===mk);
+  return { in:r2(inc.reduce((a,i)=>a+i.amount,0)), bySrc, spent:r2(spent), byPot, gave:r2(gave), zakat:r2(zakat), saved:r2(saved), goldEgp:r2(gold.reduce((a,g)=>a+g.egp,0)) };
+}
+function deltaTag(cur, prev, goodUp){
+  if(!prev && !cur) return "";
+  if(!prev) return `<div class="delta">${t("First month")}</div>`;
+  const d = cur-prev;
+  if(Math.abs(d)<0.005) return `<div class="delta">${t("Same as last month")}</div>`;
+  const good = goodUp ? d>0 : d<0;
+  return `<div class="delta ${good?"up":"down"}">${d>0?"▲":"▼"} ${fmt(Math.abs(d))} ${t("vs last month")}</div>`;
+}
+function vReport(){
+  if(!reportMonth) reportMonth = monthKey(today());
+  const mk = reportMonth, cur = monthStats(mk), prev = monthStats(shiftMonth(mk,-1));
+  const bars = (entries, colorOf, label) => { const mx = Math.max(1, ...entries.map(x=>x[1])); return entries.map(([k,v])=>`<div class="hbar" style="--c:${colorOf(k)}"><span>${esc(label(k))}</span><span class="tr"><span style="width:${v/mx*100}%"></span></span><span class="num">${fmt(v)}</span></div>`).join(""); };
+  const src = Object.entries(cur.bySrc).sort((a,b)=>b[1]-a[1]), pots = Object.entries(cur.byPot).sort((a,b)=>b[1]-a[1]);
+  const isNow = mk >= monthKey(today());
+  return `${pageTop(t("Monthly report"))}
+  <div class="mnav"><button class="iconbtn" aria-label="${esc(t("Previous month"))}" onclick="reportMonth=shiftMonth(reportMonth,-1);render()">${ic("back","flip")}</button><b>${monthName(mk)}</b><button class="iconbtn" aria-label="${esc(t("Next month"))}" ${isNow?"disabled style='opacity:.35'":""} onclick="reportMonth=shiftMonth(reportMonth,1);render()">${ic("chev","flip")}</button></div>
+  <div class="card"><div class="sub">${t("Came in")}</div><div class="stat num">${egp(cur.in)}</div>${deltaTag(cur.in, prev.in, true)}
+    ${src.length?`<div style="margin-top:10px">${bars(src, ()=>"var(--accent)", k=>tr(k))}</div>`:""}</div>
+  <div class="card"><div class="sub">${t("Saved")}</div><div class="stat num">${egp(cur.saved)}</div>${deltaTag(cur.saved, prev.saved, true)}
+    ${cur.goldEgp?`<div class="note" style="margin-inline:0">${t("Gold bought: {x}",{x:egp(cur.goldEgp)})}</div>`:""}</div>
+  <div class="card"><div class="sub">${t("Spent")}</div><div class="stat num">${egp(cur.spent)}</div>${deltaTag(cur.spent, prev.spent, false)}
+    ${pots.length?`<div style="margin-top:10px">${bars(pots, k=>pot(k).color, k=>potName(k))}</div>`:""}</div>
+  <div class="card"><div class="two"><div><div class="sub">${t("Sadaqah given")}</div><div class="num" style="font-weight:700;font-size:19px">${egp(cur.gave)}</div></div>
+    <div><div class="sub">${t("Zakat paid")}</div><div class="num" style="font-weight:700;font-size:19px">${egp(cur.zakat)}</div></div></div></div>`;
+}
+
+/* ================= HISTORY ================= */
+function vHistory(){
+  const items = [];
+  state.incomes.forEach(o=>items.push({k:"in", d:o.date, s:o.createdAt||0, id:o.id, o}));
+  state.spends.forEach(o=>items.push({k:"out", d:o.date, s:0, id:o.id, o}));
+  state.moves.forEach(o=>items.push({k:"move", d:o.date, s:0, id:o.id, o}));
+  state.gold.forEach(o=>items.push({k:"gold", d:o.date, s:0, id:o.id, o}));
+  items.sort((a,b)=> b.d.localeCompare(a.d) || (b.s-a.s) || b.id.localeCompare(a.id));
+  const shown = items.filter(x=> histFilter==="all" || (histFilter==="in"?x.k==="in":x.k!=="in"));
+  const row = x => {
+    const o = x.o;
+    if(x.k==="in"){
+      const left = undoLeft(o);
+      return `<div class="row static"><span class="grow"><div class="t">${esc(tr(o.source))}</div><div class="m">${niceDate(o.date)}${o.note?` · ${esc(o.note)}`:""}${o.sadPct?` · ${t("sadaqah {p}%",{p:o.sadPct})}`:""}</div></span>
+        <span style="text-align:end"><div class="v num" style="color:var(--ok)">+${fmt(o.amount)}</div>
+        ${left>0?`<button class="btn small ghost" style="margin-top:6px" onclick="undoIncome('${o.id}')">${t("Undo")} <span class="timer" data-undo="${o.id}">${mmss(left)}</span></button>`:`<div class="m" style="display:flex;gap:4px;align-items:center;justify-content:flex-end"><span style="display:flex;transform:scale(.7)">${ic("lock")}</span>${t("Final")}</div>`}</span></div>`;
+    }
+    const title = x.k==="out" ? (o.type==="give"?t("Gave sadaqah"):o.type==="zakat"?t("Paid zakat"):o.type==="reset"?t("Reset {p}",{p:esc(potName(o.pot))}):esc(o.note||t("Spent"))) : x.k==="move" ? (o.note==="reset"?t("Reset {p} → {q}",{p:esc(potName(o.from)), q:esc(potName(o.to))}):t("Moved {a} → {b}",{a:esc(potName(o.from)), b:esc(potName(o.to))})) : t("Bought gold");
+    const sub = x.k==="out" ? `${niceDate(o.date)} · ${esc(potName(o.pot))}` : niceDate(o.date);
+    const amt = x.k==="gold" ? o.egp : o.amount, coll = x.k==="out"?"spends":x.k==="move"?"moves":"gold";
+    return `<div class="row static"><span class="grow"><div class="t">${title}</div><div class="m">${sub}</div></span><span style="text-align:end"><div class="v num">${x.k==="move"?"":"−"}${fmt(amt)}</div><button class="btn small danger" style="margin-top:6px" onclick="delItem('${coll}','${o.id}')">${t("Delete")}</button></span></div>`;
+  };
+  return `${pageTop(t("History"))}
+  <div class="seg">${[["all","All"],["in","In"],["out","Out"]].map(([k,l])=>`<button class="${histFilter===k?"on":""}" onclick="histFilter='${k}';render()">${t(l)}</button>`).join("")}</div>
+  <div class="rows" style="margin-top:10px">${shown.length?shown.map(row).join(""):`<div class="empty">${t("Nothing here yet.")}</div>`}</div>
+  <div class="note">${t("Money-in entries can be undone for 10 minutes, then they're final.")}</div>`;
+}
+function delItem(coll,id){
+  if(coll==="incomes") return;   // money-in entries only go through the undo window
+  if(!confirm(t("Delete this entry?"))) return;
+  const w = coll==="spends" ? state.spends.find(s=>s.id===id) : null;
+  if(w && w.type==="wish" && w.wishId){ const it=state.wishes.find(x=>x.id===w.wishId); if(it){ it.bought=false; delete it.boughtDate; delete it.paid; } }
+  state[coll] = state[coll].filter(x=>x.id!==id); save(); render(); toast(t("Deleted."));
+}
+
+/* ================= LOANS ================= */
+function vLoans(){
+  const lt = loanTotals();
+  const open = state.loans.filter(l=>l.amount-loanPaid(l)>0.001), closed = state.loans.filter(l=>l.amount-loanPaid(l)<=0.001);
+  const row = l => { const left = r2(l.amount-loanPaid(l)), lent = l.dir==="lent";
+    return `<button class="row" onclick="sheetLoanItem('${l.id}')"><span class="bubble" style="--c:${lent?"var(--ok)":"var(--danger)"}">${ic("swap")}</span>
+      <span class="grow"><div class="t">${esc(l.person)}</div><div class="m">${lent?t("owes you"):t("you owe")} · ${niceDate(l.date)}</div></span><span class="v num">${egp(left)}</span>${ic("chev","chev flip")}</button>`; };
+  return `${pageTop(t("Loans"))}
+  <div class="card"><div class="two"><div><div class="sub">${t("Owed to you")}</div><div class="stat num">${egp(lt.owedToMe)}</div></div><div><div class="sub">${t("You owe")}</div><div class="stat num">${egp(lt.iOwe)}</div></div></div></div>
+  <div class="two" style="margin-top:12px"><button class="btn" onclick="sheetLoan('lent')">${t("I lent")}</button><button class="btn ghost" onclick="sheetLoan('borrowed')">${t("I borrowed")}</button></div>
+  <h2>${t("Open")}</h2><div class="rows">${open.length?open.map(row).join(""):`<div class="empty">${t("No open loans.")}</div>`}</div>
+  ${closed.length?`<h2>${t("Settled")}</h2><div class="rows">${closed.map(row).join("")}</div>`:""}`;
+}
+
+/* ================= GOLD & ZAKAT ================= */
+function vGold(){
+  ensureHawl();
+  const gv = goldValue(), g = goldStatus(), z = zakatStatus(), gp = state.settings.goldPrice, N = state.settings.nisab;
+  let zk;
+  if(z.needPrice) zk = `<div class="sub">${t("Enter today's gold price above first.")}</div>`;
+  else {
+    const tag = z.due ? `<span class="tag bad">${t("Due now")}</span>` : z.above ? `<span class="tag">${t("Above nisab")}</span>` : `<span class="tag warn">${t("Below nisab")}</span>`;
+    const msg = z.due ? t("Pay {x} (2.5%).",{x:egp(z.amount)})
+      : z.above ? t("Due on {d} if you stay above nisab — about {x}.",{d:niceDate(z.dueDate), x:egp(z.amount)})
+      : (z.hawlStart ? t("Year started {s}. What counts is {d}.",{s:niceDate(z.hawlStart), d:niceDate(z.dueDate)}) : t("{x} more to reach nisab.",{x:egp(z.nisab - z.wealth)}));
+    zk = `<div>${tag}</div><div style="margin-top:8px;font-weight:600">${msg}</div>
+      <div class="note" style="margin-inline:0">${t("Your wealth {w} · Nisab {n}",{w:egp(z.wealth), n:egp(z.nisab)})}</div>
+      <div class="two" style="margin-top:12px">${z.due?`<button class="btn small" onclick="sheetZakat()">${t("I paid zakat")}</button>`:""}<button class="btn small ghost" onclick="sheetHawl()">${t("Start date")}</button></div>`;
+  }
+  return `${pageTop(t("Gold & zakat"))}
+  <div class="card"><div class="sub">${t("Today's price, 1 g of 21k")}</div>
+    <div class="two" style="margin-top:8px"><input id="gpIn" inputmode="decimal" placeholder="0" value="${gp&&gp.p21?gp.p21:""}"><button class="btn" style="flex:0 0 auto" onclick="setGoldPrice()">${t("Save")}</button></div>
+    ${gp&&gp.p21?`<div class="note" style="margin-inline:0">${t("Updated {d}",{d:niceDate(gp.date)})}</div>`:""}</div>
+  <h2>${t("Your gold")}</h2>
+  <div class="card">${state.gold.length ? `<div class="two"><div><div class="sub">${t("Worth now")}</div><div class="stat num">${gv.hasPrice?egp(gv.value):"—"}</div></div><div><div class="sub">${t("You paid")}</div><div class="stat num">${egp(gv.paid)}</div></div></div>` : `<div class="sub">${t("No gold yet.")}</div>`}
+    ${g.due>0?`<div class="note" style="margin-inline:0">${t("Buy now: {x}",{x:egp(g.due)})}</div>`:""}
+    <button class="btn small ghost" style="margin-top:12px" onclick="sheetGold()">${ic("plus")} ${t("Add gold purchase")}</button></div>
+  <h2>${t("Zakat")}</h2><div class="card">${zk}</div>
+  <div class="note">${t("Nisab: {g} g of {k}k gold (Dar al-Ifta). Lunar year. For your exact case, ask a scholar.",{g:N.grams, k:N.karat})}</div>`;
+}
+function setGoldPrice(){ const v=num($("#gpIn").value); if(!(v>0)) return toast(t("Type a price.")); state.settings.goldPrice={p21:r2(v), date:today()}; save(); render(); toast(t("Saved.")); }
+
+/* ================= SETTINGS ================= */
+function vSettings(){
+  const S = state.settings, total = S.pots.reduce((s,p)=>s+num(p.pct),0), bad = Math.abs(total-100)>0.001;
+  const sec = (title, body) => `<details class="adv card"><summary style="display:flex;justify-content:space-between;align-items:center;font-weight:600">${title}${ic("chev","chev flip")}</summary><div style="margin-top:12px">${body}</div></details>`;
+  return `${pageTop(t("Settings"))}
+  <h2>${t("Language")}</h2>
+  <div class="seg"><button class="${S.lang!=="ar"?"on":""}" onclick="setLang('en')">English</button><button class="${S.lang==="ar"?"on":""}" onclick="setLang('ar')">العربية</button></div>
+  <h2>${t("Auto-lock")}</h2>
+  <div class="seg">${[1,2,5,15].map(m=>`<button class="${S.lockMinutes===m?"on":""}" onclick="state.settings.lockMinutes=${m};save();render()">${t("{n} min",{n:m})}</button>`).join("")}</div>
+  <h2>${t("Security & backup")}</h2>
+  <div class="rows">
+    ${rowLink("lock","#d9b45a",t("Change PIN"),"","sheetChangePin()")}
+    ${rowLink("shield","#d9b45a",t("Save a backup"),t("Locked with your PIN"),"exportData(false)")}
+    ${rowLink("undo","#d9b45a",t("Restore a backup"),"","$('#importFile').click()")}
+  </div>
+  <div class="note">${t("If you forget your PIN, your data can't be opened — not even from a backup.")}</div>
+  <h2>${t("Advanced")}</h2>
+  ${sec(t("How money is split"), `${S.pots.map(p=>`<div class="pctrow"><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="color:${p.color};display:flex">${ic(potIcon(p))}</span>
+      ${p.core?esc(potName(p)):`<button class="linkish" onclick="sheetPotForm('${p.id}')">${esc(potName(p))}</button>`}</div>
+      <input inputmode="decimal" value="${p.pct}" onchange="setPct('${p.id}',this.value)">
+      ${p.core?`<span class="sub">%</span>`:`<button class="x" aria-label="${esc(t("Remove"))}" onclick="removePot('${p.id}')">×</button>`}</div>`).join("")}
+    <div class="note" style="margin-inline:0;${bad?"color:var(--danger);font-weight:600":""}">${t("Total: {x}%",{x:fmt(total)})} ${bad?t("(must be 100%)"):"✓"}</div>
+    <div class="note" style="margin-inline:0">${t("Sadaqah and savings come from the full amount. The rest is shared by the other pots.")}</div>
+    <button class="btn small ghost" style="margin-top:10px" onclick="addPot()">${ic("plus")} ${t("Add a pot")}</button>`)}
+  <div style="height:10px"></div>
+  ${sec(t("Money sources"), `<div class="note" style="margin:0 0 6px">${t("Tap ★ to give a source its own split, e.g. more savings from Eidiya.")}</div>${S.sources.length?"":`<div class="sub" style="padding:6px 0">${t("No sources yet.")}</div>`}
+    ${S.sources.map((s,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="flex:1">${esc(tr(s))}${S.sourceRules[s]?` <span class="tag">★</span>`:""}</span>
+      <button class="btn small ghost" onclick="sheetRule(${i})">★</button><button class="btn small danger" onclick="removeSource(${i})">×</button></div>`).join("")}
+    <div class="two" style="margin-top:8px"><input id="newSrc" placeholder="${esc(t("New source"))}"><button class="btn small" style="flex:0 0 auto" onclick="addSource()">${t("Add")}</button></div>`)}
+  <div style="height:10px"></div>
+  ${sec(t("Gold & zakat rules"), `<div class="two"><div><label class="f" style="margin-top:0">${t("For every (saved)")}</label><input inputmode="decimal" value="${S.gold.every}" onchange="setGold('every',this.value)"></div>
+      <div><label class="f" style="margin-top:0">${t("Buy gold worth")}</label><input inputmode="decimal" value="${S.gold.buy}" onchange="setGold('buy',this.value)"></div></div>
+    <div class="two"><div><label class="f">${t("Nisab grams")}</label><input inputmode="decimal" value="${S.nisab.grams}" onchange="setNisab('grams',this.value)"></div>
+      <div><label class="f">${t("Karat")}</label><select onchange="setNisab('karat',this.value)">${[21,24].map(k=>`<option value="${k}" ${S.nisab.karat===k?"selected":""}>${k}</option>`).join("")}</select></div></div>`)}
+  <div style="height:10px"></div>
+  ${sec(t("Rounding"), `<div class="seg">${[1,5,10].map(r=>`<button class="${S.rounding===r?"on":""}" onclick="state.settings.rounding=${r};save();render()">${r===1?t("Exact"):t("To {n}",{n:r})}</button>`).join("")}</div>
+    <div class="note" style="margin-inline:0">${t("Sadaqah rounds up. Leftovers go to “Me”.")}</div>`)}
+  <div style="height:10px"></div>
+  ${sec(t("Danger zone"), `<button class="btn block ghost" onclick="exportData(true)">${t("Save an unlocked copy")}</button>
+    <button class="btn block danger" style="margin-top:10px" onclick="resetAll()">${t("Erase everything")}</button>`)}
+  <div class="note" style="text-align:center;margin:24px 0 8px">${t("Works offline. Nothing leaves this device.")}</div>`;
+}
+function setLang(l){ state.settings.lang=l; try{ localStorage.setItem("mizan.lang", l); }catch(e){} save(); render(); }
+function setPct(id,v){ pot(id).pct = Math.max(0,num(v)); save(); render(); }
+function renamePot(id,v){ v=v.trim(); if(v){ const p=pot(id); p.name=v; p.custom=true; save(); } render(); }
+function addPot(){ sheetPotForm(); }
+function sheetPotForm(id){
+  pfId = id || "";
+  const p = id ? pot(id) : null, me = pot("me");
+  const used = state.settings.pots.map(x=>x.color);
+  const color = p ? p.color : (PICK_COLORS.find(c=>!used.includes(c)) || PICK_COLORS[0]);
+  const icon = p ? potIcon(p) : "heart", pct = p ? p.pct : Math.min(10, me.pct);
+  openSheet(`<h3>${p?t("Edit pot"):t("New pot")}</h3>
+    <label class="f">${t("Name")}</label><input id="pfName" value="${p?esc(potName(p)):""}" placeholder="${esc(t("e.g. Nour"))}" ${p?"":"autofocus"}>
+    <label class="f">${t("Icon")}</label><div class="chips" id="pfIcon" data-val="${icon}">${PICK_ICONS.map(n=>`<button type="button" class="chip iconchip ${n===icon?"on":""}" data-v="${n}" onclick="pickOne('pfIcon',this)">${ic(n)}</button>`).join("")}</div>
+    <label class="f">${t("Color")}</label><div class="chips" id="pfColor" data-val="${color}">${PICK_COLORS.map(c=>`<button type="button" class="sw ${c===color?"on":""}" style="--c:${c}" data-v="${c}" aria-label="${c}" onclick="pickOne('pfColor',this)"></button>`).join("")}</div>
+    <label class="f">${t("Share of each income")}</label>
+    <div class="step" style="margin-top:0"><span class="grow sub" id="pfNote"></span><button class="sb" onclick="pfStep(-5)">−</button><span class="pv num" id="pfPct" data-v="${pct}">${pct}%</span><button class="sb" onclick="pfStep(5)">+</button></div>
+    ${btns(t("Save"), `doPotForm('${id||""}')`)}
+    ${p?`<button class="btn block danger" style="margin-top:10px" onclick="closeSheet();removePot('${id}')">${t("Remove pot")}</button>`:""}`);
+  pfStep(0);
+}
+function pickOne(box, el){ const b=$("#"+box); b.dataset.val=el.dataset.v; b.querySelectorAll("[data-v]").forEach(x=>x.classList.toggle("on", x===el)); }
+let pfId = "";
+function pfMax(){ return r2(pot("me").pct + (pfId ? pot(pfId).pct : 0)); }
+function pfStep(d){
+  const el=$("#pfPct"), max=pfMax(); let v = Math.max(0, Math.min(max, num(el.dataset.v)+d));
+  el.dataset.v=v; el.textContent=v+"%";
+  if(d){ el.style.animation="none"; void el.offsetWidth; el.style.animation="pop .3s"; }
+  $("#pfNote").textContent = t("“Me” will get {p}%",{p:r2(max-v)});
+}
+function doPotForm(id){
+  const name=$("#pfName").value.trim(); if(!name) return toast(t("Give it a name."));
+  const icon=$("#pfIcon").dataset.val, color=$("#pfColor").dataset.val, pct=num($("#pfPct").dataset.v), me=pot("me");
+  if(id){ const p=pot(id); me.pct = r2(me.pct + p.pct - pct); Object.assign(p, {name, icon, color, pct, custom:true}); }
+  else { me.pct = r2(me.pct - pct); state.settings.pots.push({ id:"p"+uid(), name, icon, color, pct, base:"rest", custom:true }); }
+  save(); closeSheet(); render(); toast(id?t("Saved."):t("Pot added.")); if(!id) burst("confetti");
+}
+function sheetSource(){
+  openSheet(`<h3>${t("Add a source")}</h3><div class="sub">${t("Who or where the money comes from.")}</div>
+    <input id="srcName" style="margin-top:12px" placeholder="${esc(t("e.g. Dad"))}" autofocus onkeydown="if(event.key==='Enter')doSource()">
+    ${btns(t("Add"), "doSource()")}`);
+}
+function doSource(){
+  const v=$("#srcName").value.trim(); if(!v) return toast(t("Give it a name."));
+  if(!state.settings.sources.includes(v)) state.settings.sources.push(v);
+  if(view==="add") addDraft.source = v;
+  save(); closeSheet(); render();
+}
+function removePot(id){
+  const b=balances()[id]||0;
+  if(!confirm(b ? t("This pot has {x}. It will move to “Me”. Remove it?",{x:egp(b)}) : t("Remove this pot?"))) return;
+  if(b) state.moves.push({id:uid(),date:today(),from:id,to:"me",amount:b,note:""});
+  const p = pot(id), me = pot("me"); me.pct = r2(me.pct + (p.pct||0));
+  state.settings.pots = state.settings.pots.filter(x=>x.id!==id);
+  state.removedPots = (state.removedPots||[]).concat([{id:p.id,name:potName(p),color:p.color,icon:p.icon,custom:true}]);
+  state.wishes.forEach(w=>{ if(w.pot===id && !w.bought) w.pot="me"; });
+  for(const s in state.settings.sourceRules) delete state.settings.sourceRules[s][id];
+  save(); render();
+}
+function setGold(k,v){ const n=num(v); if(n>0){ state.settings.gold[k]=n; save(); } render(); }
+function setNisab(k,v){ const n=num(v); if(n>0){ state.settings.nisab[k]=n; save(); } render(); }
+function addSource(){ const v=$("#newSrc").value.trim().replace(/\s+/g," "); if(!v) return; if(state.settings.sources.includes(v)) return toast(t("Already there.")); state.settings.sources.push(v); save(); render(); }
+function removeSource(i){ const s=state.settings.sources[i]; if(!confirm(t("Remove “{s}”? Old entries stay.",{s:tr(s)}))) return; state.settings.sources.splice(i,1); delete state.settings.sourceRules[s]; save(); render(); }
+function resetAll(){
+  if(!confirm(t("Erase ALL data on this device?"))) return;
+  if(!confirm(t("Are you sure? This can't be undone."))) return;
+  try{ localStorage.removeItem(KEY_ENC); localStorage.removeItem(KEY_PLAIN); localStorage.removeItem(KEY_FAILS); }catch(e){}
+  state=null; cryptoKey=null; meta=null; showSetup();
+}
+
+/* ================= BACKUP ================= */
+function download(text, name){
+  const blob = new Blob([text],{type:"application/json"}), file = new File([blob], name, {type:"application/json"});
+  if(navigator.canShare && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && navigator.canShare({files:[file]})){ navigator.share({files:[file], title:"Mizan"}).catch(()=>{}); return; }
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500);
+  toast(t("Saved to your Downloads."));
+}
+async function exportData(readable){
+  if(readable){ if(!confirm(t("Anyone who opens this file can read your data. Continue?"))) return; download(JSON.stringify(state,null,1), `mizan-unlocked-${today()}.json`); }
+  else download(JSON.stringify(await sealWith(cryptoKey, meta, state)), `mizan-backup-${today()}.mizan`);
+}
+$("#importFile").addEventListener("change", e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=async ()=>{
+    e.target.value="";
+    let obj; try{ obj=JSON.parse(rd.result); }catch(err){ return alert(t("This isn't a Mizan backup.")); }
+    if(obj && obj.ct && obj.salt){
+      if(meta && obj.salt===b64(meta.salt)){ try{ return confirmImport(await openWith(cryptoKey, obj)); }catch(err){} }
+      return sheetBackupPin(obj);
+    }
+    if(obj && obj.settings && Array.isArray(obj.incomes)) return confirmImport(obj);
+    alert(t("This isn't a Mizan backup."));
+  };
+  rd.readAsText(f);
+});
+function confirmImport(s){
+  if(!confirm(t("Replace everything here with this backup?"))) return;
+  adopt(s); save(); go("home"); toast(t("Backup restored."));
+}
+function sheetBackupPin(obj){
+  openSheet(`<h3>${t("Backup PIN")}</h3><div class="sub">${t("This backup uses a different PIN.")}</div>
+    <input id="bpPin" type="password" inputmode="numeric" autocomplete="off" style="margin-top:12px;font-size:24px;letter-spacing:6px;text-align:center" autofocus>
+    <div class="two" style="margin-top:16px"><button class="btn ghost" onclick="closeSheet()">${t("Cancel")}</button><button class="btn" id="bpGo">${t("Open")}</button></div>`);
+  $("#bpGo").onclick = async ()=>{
+    try{ const k = await deriveKey($("#bpPin").value, unb64(obj.salt), obj.iter||ITER); const s = await openWith(k, obj); closeSheet(); confirmImport(s); }
+    catch(err){ toast(t("Wrong PIN.")); }
+  };
+}
+
+/* ================= SHEETS ================= */
+function openSheet(html){ const s=$("#sheet"); s.innerHTML=html; $("#sheetBg").classList.add("on"); const f=s.querySelector("[autofocus]"); if(f) setTimeout(()=>f.focus(),60); }
+function closeSheet(){ $("#sheetBg").classList.remove("on"); }
+$("#sheetBg").addEventListener("click", e=>{ if(e.target.id==="sheetBg") closeSheet(); });
+const btns = (ok, fn) => `<div class="two" style="margin-top:18px"><button class="btn ghost" onclick="closeSheet()">${t("Cancel")}</button><button class="btn" onclick="${fn}">${ok}</button></div>`;
+function potChips(id, sel, filter){
+  return `<div class="chips" id="${id}" data-val="${sel}">${state.settings.pots.filter(filter||(()=>true)).map(p=>`<button type="button" class="chip ${p.id===sel?"on":""}" data-p="${p.id}" onclick="pickChip('${id}',this)"><span style="color:${p.id===sel?"inherit":p.color};display:flex">${ic(potIcon(p))}</span>${esc(potName(p))}</button>`).join("")}</div>`;
+}
+function firstPot(excl){ const p = state.settings.pots.find(p=>p.base==="rest" && p.id!=="me" && p.id!==excl); return p ? p.id : (excl==="me" ? "savings" : "me"); }
+function pickChip(id, el){ const box=$("#"+id); box.dataset.val=el.dataset.p; box.querySelectorAll(".chip").forEach(c=>{ const on=c===el; c.classList.toggle("on",on); c.firstChild.style.color = on ? "inherit" : pot(c.dataset.p).color; }); }
+function chipVal(id){ return $("#"+id).dataset.val; }
+
+function sheetPot(id){
+  const p=pot(id), b=balances()[id]||0;
+  openSheet(`<div style="display:flex;align-items:center;gap:12px">${bubble(p)}<div><h3 style="margin:0">${esc(potName(p))}</h3><div class="num" style="font-size:26px;font-weight:700">${egp(b)}</div></div></div>
+    <div class="two" style="margin-top:18px"><button class="btn" onclick="sheetSpend('${id}')">${id==="sadaqah"?t("I gave sadaqah"):ic("minus")+" "+t("Spend")}</button><button class="btn ghost" onclick="sheetMove('${id}')">${ic("swap")} ${t("Move")}</button></div>
+    ${id==="savings"?`<button class="btn block ghost" style="margin-top:10px" onclick="sheetGold()">${ic("gold")} ${t("Add gold purchase")}</button>`:""}
+    ${p.core?"":`<button class="btn block ghost" style="margin-top:10px" onclick="sheetPotForm('${id}')">${ic("edit")} ${t("Edit pot")}</button>`}
+    ${Math.abs(b)>0.001?`<button class="btn block danger" style="margin-top:10px" onclick="sheetReset('${id}')">${ic("undo")} ${t("Reset pot")}</button>`:""}
+    <button class="btn block ghost" style="margin-top:10px" onclick="closeSheet()">${t("Close")}</button>`);
+}
+function sheetReset(id){
+  const p=pot(id), b=balances()[id]||0;
+  openSheet(`<h3>${t("Reset {p}",{p:esc(potName(p))})}</h3>
+    <div class="card warn" style="margin-top:8px;display:flex;gap:10px;align-items:flex-start">${ic("undo")}<div>${t("{p} goes from {x} back to 0.",{p:esc(potName(p)), x:egp(b)})}</div></div>
+    <label class="f">${t("Where should the money go?")}</label>
+    <div class="chips" id="rsTo" data-val="${id==="me"?"_clear":"me"}">
+      ${state.settings.pots.filter(x=>x.id!==id).map(x=>`<button type="button" class="chip ${x.id===(id==="me"?"":"me")?"on":""}" data-v="${x.id}" onclick="pickOne('rsTo',this)"><span style="color:${x.color};display:flex">${ic(potIcon(x))}</span>${esc(potName(x))}</button>`).join("")}
+      <button type="button" class="chip ${id==="me"?"on":""}" data-v="_clear" onclick="pickOne('rsTo',this)">${ic("minus")} ${t("Nowhere, it's gone")}</button></div>
+    <div class="note">${t("You can undo this from History.")}</div>
+    ${btns(t("Reset"), `doReset('${id}')`)}`);
+}
+function doReset(id){
+  const b=r2(balances()[id]||0), to=$("#rsTo").dataset.val;
+  if(Math.abs(b)<0.001) return closeSheet();
+  if(to==="_clear") state.spends.push({id:uid(),date:today(),pot:id,amount:b,note:"",type:"reset"});
+  else state.moves.push({id:uid(),date:today(),from:id,to,amount:b,note:"reset"});
+  save(); closeSheet(); render(); toast(t("{p} is now 0.",{p:potName(id)}));
+}
+function sheetSpend(id){
+  const give = id==="sadaqah";
+  openSheet(`<h3>${give?t("I gave sadaqah"):t("Money out")}</h3>
+    <input id="sAmt" class="amount num" inputmode="decimal" placeholder="0" autofocus style="margin-top:8px">
+    ${give?"":`<label class="f">${t("From")}</label>${potChips("sPot", id||"me", p=>p.id!=="sadaqah")}`}
+    <label class="f">${give?t("Note"):t("What for?")}</label><input id="sNote">
+    ${btns(t("Save"), `doSpend(${give})`)}`);
+}
+function doSpend(give){
+  const a=num($("#sAmt").value), p = give ? "sadaqah" : chipVal("sPot"); if(!(a>0)) return toast(t("Type the amount."));
+  const b=balances()[p]||0;
+  if(a>b+1e-9 && !confirm(t("{p} only has {x}. Continue?",{p:potName(p), x:egp(b)}))) return;
+  state.spends.push({id:uid(),date:today(),pot:p,amount:r2(a),note:$("#sNote").value.trim(),type:give?"give":"spend"});
+  save(); closeSheet(); render(); toast(give?t("May it be accepted."):t("Saved.")); if(give) burst("coins");
+}
+function sheetMove(from){
+  openSheet(`<h3>${t("Move money")}</h3>
+    <input id="mAmt" class="amount num" inputmode="decimal" placeholder="0" autofocus style="margin-top:8px">
+    <label class="f">${t("From")}</label>${potChips("mFrom", from)}
+    <label class="f">${t("To")}</label>${potChips("mTo", from==="me"?firstPot("me"):"me")}
+    ${btns(t("Move"), "doMove()")}`);
+}
+function doMove(){
+  const a=num($("#mAmt").value), f=chipVal("mFrom"), to=chipVal("mTo");
+  if(!(a>0)) return toast(t("Type the amount.")); if(f===to) return toast(t("Pick two different pots."));
+  const b=balances()[f]||0; if(a>b+1e-9 && !confirm(t("{p} only has {x}. Continue?",{p:potName(f), x:egp(b)}))) return;
+  state.moves.push({id:uid(),date:today(),from:f,to,amount:r2(a),note:""});
+  save(); closeSheet(); render(); toast(t("Moved."));
+}
+function sheetGold(){
+  const g=goldStatus();
+  openSheet(`<h3>${t("Gold purchase")}</h3><div class="sub">${t("Paid from savings ({x}).",{x:egp(g.cash)})}</div>
+    <input id="gAmt" class="amount num" inputmode="decimal" value="${g.due>0?g.due:""}" placeholder="0" autofocus style="margin-top:10px">
+    <div class="two"><div><label class="f">${t("Grams (optional)")}</label><input id="gGr" inputmode="decimal"></div>
+    <div><label class="f">${t("Karat")}</label><select id="gK">${[21,18,24].map(k=>`<option value="${k}">${k}</option>`).join("")}</select></div></div>
+    ${btns(t("Save"), "doGold()")}`);
+}
+function doGold(){
+  const a=num($("#gAmt").value); if(!(a>0)) return toast(t("Type the amount."));
+  state.gold.push({id:uid(),date:today(),egp:r2(a),grams:num($("#gGr").value)||0,karat:+$("#gK").value,note:""});
+  save(); closeSheet(); if(view==="plan") go("home"); else render(); toast(t("Saved."));
+}
+function sheetWish(id){
+  const w = id ? state.wishes.find(x=>x.id===id) : null;
+  openSheet(`<h3>${w?t("Edit goal"):t("New goal")}</h3>
+    <label class="f">${t("What do you want?")}</label><input id="wName" value="${w?esc(w.name):""}" ${w?"":"autofocus"}>
+    <label class="f">${t("Price")}</label><input id="wPrice" inputmode="decimal" value="${w?w.price:""}">
+    <label class="f">${t("Pay from")}</label>${potChips("wPot", w?w.pot:firstPot(), p=>p.id!=="sadaqah")}
+    <label class="f">${t("By when? (optional)")}</label><input id="wDue" type="date" value="${w&&w.due?w.due:""}">
+    ${btns(t("Save"), `doWish('${id||""}')`)}
+    ${w?`<button class="btn block danger" style="margin-top:10px" onclick="wishDel('${w.id}')">${t("Delete goal")}</button>`:""}`);
+}
+function doWish(id){
+  const n=$("#wName").value.trim(), p=num($("#wPrice").value); if(!n||!(p>0)) return toast(t("Add a name and a price."));
+  const data = { name:n, price:r2(p), pot:chipVal("wPot"), due:$("#wDue").value||null };
+  if(id) Object.assign(state.wishes.find(x=>x.id===id), data);
+  else state.wishes.push(Object.assign({id:uid(), added:today(), bought:false}, data));
+  save(); closeSheet(); render();
+}
+function wishDel(id){ if(!confirm(t("Delete this goal?"))) return; state.wishes=state.wishes.filter(w=>w.id!==id); save(); closeSheet(); render(); }
+function sheetBuyWish(id){
+  const w=state.wishes.find(x=>x.id===id);
+  openSheet(`<h3>${t("Bought “{n}”",{n:esc(w.name)})}</h3><label class="f">${t("How much did you pay?")}</label>
+    <input id="bAmt" class="amount num" inputmode="decimal" value="${w.price}" autofocus>
+    <div class="note">${t("Taken from {p}.",{p:esc(potName(w.pot))})}</div>
+    ${btns(t("Done"), `doBuyWish('${id}')`)}`);
+}
+function doBuyWish(id){
+  const w=state.wishes.find(x=>x.id===id), a=num($("#bAmt").value); if(!(a>0)) return toast(t("Type the amount."));
+  const b=balances()[w.pot]||0;
+  if(a>b+1e-9 && !confirm(t("{p} only has {x}. Continue?",{p:potName(w.pot), x:egp(b)}))) return;
+  state.spends.push({id:uid(),date:today(),pot:w.pot,amount:r2(a),note:w.name,type:"wish",wishId:w.id});
+  w.bought=true; w.boughtDate=today(); w.paid=r2(a); save(); closeSheet(); render(); toast(t("Enjoy it!")); burst("confetti");
+}
+function sheetLoan(dir){
+  const lent = dir==="lent", people = [...new Set(state.loans.map(l=>l.person))];
+  openSheet(`<h3>${lent?t("I lent money"):t("I borrowed money")}</h3>
+    <label class="f">${lent?t("To whom?"):t("From whom?")}</label><input id="lPerson" list="lPeople" autofocus><datalist id="lPeople">${people.map(p=>`<option value="${esc(p)}">`).join("")}</datalist>
+    <label class="f">${t("Amount")}</label><input id="lAmt" class="amount num" inputmode="decimal" placeholder="0">
+    <label class="f">${lent?t("Taken from"):t("Put into")}</label>${potChips("lPot","me", p=>p.id!=="sadaqah")}
+    ${btns(t("Save"), `doLoan('${dir}')`)}`);
+}
+function doLoan(dir){
+  const person=$("#lPerson").value.trim(), a=num($("#lAmt").value), p=chipVal("lPot");
+  if(!person || !(a>0)) return toast(t("Add a name and an amount."));
+  if(dir==="lent"){ const b=balances()[p]||0; if(a>b+1e-9 && !confirm(t("{p} only has {x}. Continue?",{p:potName(p), x:egp(b)}))) return; }
+  state.loans.push({id:uid(), dir, person, amount:r2(a), pot:p, note:"", date:today(), pays:[]});
+  save(); closeSheet(); render(); toast(t("Saved."));
+}
+function sheetLoanItem(id){
+  const l=state.loans.find(x=>x.id===id), left=r2(l.amount-loanPaid(l)), lent=l.dir==="lent";
+  openSheet(`<h3>${esc(l.person)}</h3><div class="sub">${lent?t("owes you"):t("you owe")} · ${t("{x} of {y} left",{x:egp(left), y:fmt(l.amount)})}</div>
+    ${left>0?`<label class="f">${lent?t("They paid back"):t("I paid back")}</label><input id="rAmt" class="amount num" inputmode="decimal" value="${left}">
+    ${btns(t("Save"), `doRepay('${id}')`)}`:`<div class="note">${t("Fully paid.")}</div>`}
+    <button class="btn block danger" style="margin-top:10px" onclick="delLoan('${l.id}')">${t("Delete")}</button>`);
+}
+function doRepay(id){
+  const l=state.loans.find(x=>x.id===id), left=r2(l.amount-loanPaid(l)), a=num($("#rAmt").value);
+  if(!(a>0)) return toast(t("Type the amount.")); if(a>left+1e-9) return toast(t("That's more than what's left."));
+  l.pays=(l.pays||[]).concat([{id:uid(),date:today(),amount:r2(a)}]); save(); closeSheet(); render();
+  toast(a>=left-1e-9 ? t("Fully paid.") : t("Saved.")); if(a>=left-1e-9) burst("confetti");
+}
+function delLoan(id){ if(!confirm(t("Delete this loan?"))) return; state.loans=state.loans.filter(l=>l.id!==id); save(); closeSheet(); render(); }
+function sheetRule(i){
+  const S=state.settings, src=S.sources[i], rule=S.sourceRules[src];
+  openSheet(`<h3>★ ${esc(tr(src))}</h3><div class="sub">${t("Used only for money from {s}.",{s:esc(tr(src))})}</div>
+    <div id="ruleRows" style="margin-top:10px">${S.pots.map(p=>`<div class="pctrow"><div style="display:flex;align-items:center;gap:8px"><span style="color:${p.color};display:flex">${ic(potIcon(p))}</span>${esc(potName(p))}</div>
+      <input inputmode="decimal" data-p="${p.id}" value="${rule?num(rule[p.id]):p.pct}" oninput="ruleSum()"><span class="sub">%</span></div>`).join("")}</div>
+    <div class="note" id="ruleSum"></div>
+    ${btns(t("Save"), `doRule(${i})`)}
+    ${rule?`<button class="btn block ghost" style="margin-top:10px" onclick="delRule(${i})">${t("Back to normal split")}</button>`:""}`);
+  ruleSum();
+}
+function ruleSum(){ let s=0; document.querySelectorAll("#ruleRows input").forEach(x=>s+=num(x.value)); const e=$("#ruleSum"); const bad=Math.abs(s-100)>0.001; e.textContent=t("Total: {x}%",{x:fmt(s)})+(bad?" "+t("(must be 100%)"):" ✓"); e.style.color=bad?"var(--danger)":""; return s; }
+function doRule(i){
+  if(Math.abs(ruleSum()-100)>0.001) return toast(t("Total must be 100%."));
+  const r={}; document.querySelectorAll("#ruleRows input").forEach(x=>r[x.dataset.p]=num(x.value));
+  state.settings.sourceRules[state.settings.sources[i]]=r; save(); closeSheet(); render(); toast(t("Saved."));
+}
+function delRule(i){ delete state.settings.sourceRules[state.settings.sources[i]]; save(); closeSheet(); render(); }
+function sheetZakat(){
+  const z=zakatStatus();
+  openSheet(`<h3>${t("I paid zakat")}</h3>
+    <input id="zAmt" class="amount num" inputmode="decimal" value="${z.amount}" autofocus style="margin-top:8px">
+    <label class="f">${t("Taken from")}</label>${potChips("zPot","savings", p=>p.id!=="sadaqah")}
+    ${btns(t("Save"), "doZakat()")}`);
+}
+function doZakat(){
+  const a=num($("#zAmt").value); if(!(a>0)) return toast(t("Type the amount."));
+  state.spends.push({id:uid(),date:today(),pot:chipVal("zPot"),amount:r2(a),note:"",type:"zakat"});
+  state.zakat.hawlStart = today(); save(); closeSheet(); render(); toast(t("May it be accepted."));
+}
+function sheetHawl(){
+  openSheet(`<h3>${t("Zakat year start")}</h3><div class="sub">${t("The day your money first reached nisab, or the day you last paid zakat.")}</div>
+    <input id="hDate" type="date" style="margin-top:12px" value="${state.zakat.hawlStart||today()}">
+    ${btns(t("Save"), "doHawl()")}`);
+}
+function doHawl(){ state.zakat.hawlStart=$("#hDate").value||null; save(); closeSheet(); render(); }
+function sheetChangePin(){
+  openSheet(`<h3>${t("Change PIN")}</h3>
+    <label class="f">${t("Current PIN")}</label><input id="cp0" type="password" inputmode="numeric" autocomplete="off" autofocus>
+    <label class="f">${t("New PIN (4–6 digits)")}</label><input id="cp1" type="password" inputmode="numeric" autocomplete="off">
+    <label class="f">${t("New PIN again")}</label><input id="cp2" type="password" inputmode="numeric" autocomplete="off">
+    ${btns(t("Change"), "doChangePin()")}`);
+}
+async function doChangePin(){
+  const a=$("#cp0").value, b=$("#cp1").value, c=$("#cp2").value;
+  try{ const k=await deriveKey(a, meta.salt, meta.iter); await openWith(k, readBlob()); }catch(e){ return toast(t("Current PIN is wrong.")); }
+  if(!/^\d{4,6}$/.test(b)) return toast(t("PIN must be 4 to 6 digits."));
+  if(b!==c) return toast(t("The new PINs don't match."));
+  await setNewPin(b); closeSheet(); toast(t("PIN changed."));
+}
+
+/* ================= LOCK / UNLOCK ================= */
+let padBuf = "", padHandler = null, padMax = 6, padAuto = false;
+function padHTML(title, sub, extra){
+  return `<div class="lock"><img src="apple-touch-icon.png" alt="" onerror="this.style.display='none'">
+    <h1>${title}</h1><div class="sub" style="max-width:300px">${sub}</div>
+    <div class="dots" id="dots"></div>
+    <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="key" data-k="${n}">${n}</button>`).join("")}
+      <button class="key fn" data-k="del" aria-label="Delete">⌫</button><button class="key" data-k="0">0</button><button class="key go ${padAuto?"hidden":""}" data-k="ok" aria-label="OK">✓</button></div>
+    ${extra||""}</div>`;
+}
+function drawDots(){ const d=$("#dots"); if(!d) return; const n = padAuto ? padMax : Math.max(4, padBuf.length); d.innerHTML = Array.from({length:n},(_,i)=>`<i class="${i<padBuf.length?"f":""}"></i>`).join(""); }
+function padKey(k){
+  if(!padHandler) return;
+  if(k==="del"){ padBuf=padBuf.slice(0,-1); drawDots(); return; }
+  if(k==="ok"){ if(padBuf.length>=4) padHandler(padBuf); return; }
+  if(/^\d$/.test(k) && padBuf.length<padMax){ padBuf+=k; drawDots(); if(padAuto && padBuf.length===padMax) setTimeout(()=>padHandler(padBuf),120); }
+}
+document.addEventListener("keydown", e=>{
+  if(!padHandler || !document.body.classList.contains("locked")) return;
+  if(/^\d$/.test(e.key)) padKey(e.key); else if(e.key==="Backspace") padKey("del"); else if(e.key==="Enter") padKey("ok");
+});
+function shakeDots(){ const d=$("#dots"); if(d){ d.classList.remove("shake"); void d.offsetWidth; d.classList.add("shake"); } padBuf=""; drawDots(); }
+function showPad(title, sub, handler, opts){
+  document.body.classList.add("locked"); closeSheet(); applyLang();
+  padMax = (opts&&opts.len) || 6; padAuto = !!(opts&&opts.len); padHandler = handler;
+  $("#app").innerHTML = padHTML(title, sub, opts&&opts.extra);
+  document.querySelectorAll(".key").forEach(k=>k.onclick=()=>padKey(k.dataset.k));
+  padBuf=""; drawDots();
+}
+function noCrypto(){ document.body.classList.add("locked"); $("#app").innerHTML = `<div class="lock"><h1>${t("Mizan")}</h1><div class="sub">${t("Open Mizan from its file on your laptop, or its icon on your phone.")}</div></div>`; }
+function showSetup(){
+  if(!window.crypto || !crypto.subtle) return noCrypto();
+  const legacy = hasLegacy();
+  showPad(t("Choose a PIN"), t("4 to 6 digits, then press ✓."), pin=>{
+    const first = pin;
+    showPad(t("Type it again"), "", async pin2=>{
+      if(pin2!==first){ toast(t("They didn't match. Try again.")); return showSetup(); }
+      let data = DEFAULTS();
+      state = data; await setNewPin(first);
+      if(legacy){ try{ adopt(JSON.parse(localStorage.getItem(KEY_PLAIN))); await save(); }catch(e){} }
+      try{ localStorage.removeItem(KEY_PLAIN); }catch(e){}
+      padHandler=null; startSession(); toast(t("Done. Don't forget your PIN."));
+    }, {len:first.length});
+  });
+}
+async function setNewPin(pin){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  cryptoKey = await deriveKey(pin, salt, ITER); meta = { salt, iter:ITER, len:pin.length };
+  await save();
+}
+function fails(){ try{ return JSON.parse(localStorage.getItem(KEY_FAILS))||{n:0,until:0}; }catch(e){ return {n:0,until:0}; } }
+function setFails(f){ try{ localStorage.setItem(KEY_FAILS, JSON.stringify(f)); }catch(e){} }
+function showUnlock(){
+  if(!window.crypto || !crypto.subtle) return noCrypto();
+  const blob = readBlob();
+  showPad(t("Mizan"), t("Enter your PIN"), async pin=>{
+    const f = fails();
+    if(Date.now() < f.until){ shakeDots(); return toast(t("Too many tries. Wait {n} seconds.",{n:Math.ceil((f.until-Date.now())/1000)})); }
+    try{
+      const salt = unb64(blob.salt), key = await deriveKey(pin, salt, blob.iter||ITER), s = await openWith(key, blob);
+      cryptoKey = key; meta = { salt, iter: blob.iter||ITER, len: blob.len||pin.length };
+      adopt(s); setFails({n:0,until:0}); padHandler=null; startSession();
+    }catch(e){
+      f.n++; if(f.n>=5) f.until = Date.now() + 30000*Math.pow(2, f.n-5); setFails(f);
+      shakeDots(); toast(f.n>=5 ? t("Wrong PIN. Wait {n} seconds.",{n:Math.round(30*Math.pow(2,f.n-5))}) : t("Wrong PIN."));
+    }
+  }, { len: blob.len || 0, extra:`<button class="linkbtn" onclick="forgotPin()">${t("Forgot PIN?")}</button>` });
+  if(!blob.len){ padAuto=false; padMax=6; const ok=document.querySelector(".key.go"); if(ok) ok.classList.remove("hidden"); drawDots(); }
+}
+function forgotPin(){
+  if(!confirm(t("Without the PIN your data can't be opened. Erase everything and start again?"))) return;
+  if(!confirm(t("Are you sure? This can't be undone."))) return;
+  try{ localStorage.removeItem(KEY_ENC); localStorage.removeItem(KEY_FAILS); }catch(e){}
+  showSetup();
+}
+let lastActive = Date.now(), hiddenAt = 0;
+function lockApp(){ if(!state) return; save(); state=null; cryptoKey=null; closeSheet(); showUnlock(); }
+function startSession(){ lastActive = Date.now(); heroShown = null; go("home"); }
+["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev, ()=>{ lastActive=Date.now(); }, {passive:true}));
+document.addEventListener("visibilitychange", ()=>{
+  if(document.hidden){ hiddenAt=Date.now(); return; }
+  if(state && hiddenAt && Date.now()-hiddenAt > state.settings.lockMinutes*60000) lockApp();
+});
+setInterval(()=>{ if(state && Date.now()-lastActive > state.settings.lockMinutes*60000) lockApp(); }, 10000);
+
+/* ================= boot ================= */
+document.querySelectorAll(".tab").forEach(tb=>tb.onclick=()=>go(tb.dataset.v));
+applyLang();
+if(readBlob()) showUnlock(); else showSetup();
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+</script>
+</body>
+</html>

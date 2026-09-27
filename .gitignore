@@ -1,0 +1,13 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Personal data must never be committed
+*.mizan
+mizan-backup-*
+mizan-unlocked-*
+*.zip
+node_modules/
