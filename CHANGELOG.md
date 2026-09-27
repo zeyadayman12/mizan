@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7: iPhone ready (27 Sep 2026)
+- Hosted on GitHub Pages so the iPhone can install it to the Home Screen.
+- Backup files can be picked on iPhone (the file picker no longer greys out .mizan files).
+
 ## v0.6: Reset pots (27 Sep 2026)
 - Any pot can be reset to 0. The money goes to another pot, or is cleared if it's already gone.
 - Resets appear in History and can be undone by deleting them there.

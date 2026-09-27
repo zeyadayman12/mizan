@@ -28,5 +28,5 @@ This is our working list. Each item gets done and checked off. Real usage decide
 - [ ] Check the name "Mizan" isn't taken by another finance app
 - [ ] Privacy page (nothing leaves the device)
 - [ ] Scholar review of the sadaqah, gold, and zakat wording
-- [ ] Web version on GitHub Pages
+- [x] Web version on GitHub Pages (for personal use on iPhone)
 - [ ] App stores later (Google Play: $25 once; Apple: $99/year)

@@ -32,7 +32,7 @@ It runs on a phone (installed to the home screen) or a laptop, needs no internet
 
 **Laptop (Windows):** keep all files in one folder and double-click `Open Mizan.cmd`. Mizan opens in its own Microsoft Edge app window. You can also open `index.html` in any modern browser.
 
-**Phone:** the files must be served from a web address (for example GitHub Pages) once. After you open it in Safari and choose **Share → Add to Home Screen**, it works fully offline.
+**Phone:** open **https://zeyadayman12.github.io/mizan/** once. After you open it in Safari and choose **Share → Add to Home Screen**, it works fully offline.
 
 Data is stored in the browser on each device. Use **Settings → Save a backup** to keep a copy and to move data between devices.
 
