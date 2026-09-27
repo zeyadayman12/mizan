@@ -214,6 +214,10 @@ details.link summary::-webkit-details-marker{display:none}
 .ptile .pv.neg{color:var(--danger)}
 .ptile.add{border-style:dashed;border-color:rgba(217,180,90,.45)}
 .ptile.add .pn{color:var(--gold);font-weight:600}
+/* ---- recovery code ---- */
+.rcode{display:grid;grid-template-columns:repeat(5,auto);gap:8px;justify-content:center;margin:22px 0;direction:ltr}
+.rcode span{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:19px;font-weight:700;letter-spacing:1px;background:var(--card2);border:1px solid rgba(61,220,132,.4);color:#bff7d4;border-radius:10px;padding:10px 8px}
+@media (max-width:380px){ .rcode{grid-template-columns:repeat(3,auto)} }
 /* ---- blessing overlay (sadaqah) ---- */
 .bless{position:fixed;inset:0;z-index:35;display:grid;place-items:center;background:rgba(0,0,0,.55);padding:24px;opacity:0;pointer-events:none;transition:opacity .35s}
 .bless.on{opacity:1;pointer-events:auto}
@@ -259,6 +263,8 @@ details.link summary::-webkit-details-marker{display:none}
 <canvas id="fx" width="0" height="0"></canvas>
 <input type="file" id="importFile" class="hidden">
 
+<script src="engine.js"></script>
+<script src="vault.js"></script>
 <script>
 "use strict";
 /* ================= icons (simple line icons) ================= */
@@ -306,7 +312,7 @@ function potIcon(p){ return p.icon || POT_ICON[p.id] || "dot"; }
 function bubble(p){ return `<span class="bubble" style="--c:${p.color}">${ic(potIcon(p))}</span>`; }
 
 /* ================= translations ================= */
-const AR = /*AR-START*/{"(must be 100%)":"(لازم يكون 100%)","4 to 6 digits, then press ✓.":"من 4 إلى 6 أرقام، ثم اضغط ✓.","Above nisab":"فوق النصاب","Add":"إضافة","Add a name and a price.":"اكتب الاسم والسعر.","Add a name and an amount.":"اكتب الاسم والمبلغ.","Add a pot":"إضافة بند","Add about {x} a month to make it.":"زوّد حوالي {x} في الشهر علشان تلحق.","Add gold purchase":"تسجيل شراء ذهب","Add something you want to buy. Mizan tells you when you can afford it.":"أضف شيئًا تريد شراءه، وميزان يقول لك متى تقدر تشتريه.","Added {x} from {s}":"أضفت {x} من {s}","Added. Give it a % so the total is 100%.":"تمت الإضافة. أعطه نسبة ليصبح المجموع 100%.","Advanced":"إعدادات متقدمة","All":"الكل","Already there.":"موجود بالفعل.","Amount":"المبلغ","Anyone who opens this file can read your data. Continue?":"أي شخص يفتح هذا الملف يستطيع قراءة بياناتك. متابعة؟","Are you sure? This can't be undone.":"هل أنت متأكد؟ لا يمكن التراجع عن هذا.","Aunt":"طنط","Auto-lock":"القفل التلقائي","Back":"رجوع","Back to normal split":"ارجع للتقسيم العادي","Backup PIN":"رمز النسخة الاحتياطية","Backup restored.":"تمت استعادة النسخة.","Behind":"متأخر","Below nisab":"أقل من النصاب","Bought":"اشتريت","Bought gold":"شراء ذهب","Bought “{n}”":"اشتريت «{n}»","Buy gold":"اشترِ ذهب","Buy gold worth":"اشترِ ذهبًا بقيمة","Buy now: {x}":"اشترِ الآن: {x}","By when? (optional)":"قبل تاريخ؟ (اختياري)","Came in":"الوارد","Cancel":"إلغاء","Change":"تغيير","Change PIN":"تغيير الرمز","Choose a PIN":"اختر رمزًا سريًا","Close":"إغلاق","Couldn't save. Export a backup now.":"تعذّر الحفظ. احفظ نسخة احتياطية الآن.","Current PIN":"الرمز الحالي","Current PIN is wrong.":"الرمز الحالي غير صحيح.","Dad":"بابا","Danger zone":"منطقة الخطر","Date":"التاريخ","Date passed":"فات الموعد","Delete":"حذف","Delete goal":"حذف الهدف","Delete this entry?":"حذف هذا القيد؟","Delete this goal?":"حذف هذا الهدف؟","Delete this loan?":"حذف هذا الدَّين؟","Deleted.":"تم الحذف.","Done":"تم","Done. Don't forget your PIN.":"تم. لا تنسَ رمزك.","Due now":"واجبة الآن","Due on {d} if you stay above nisab — about {x}.":"تجب في {d} لو ظللت فوق النصاب — حوالي {x}.","EGP":"جنيه","Edit":"تعديل","Edit goal":"تعديل الهدف","Eidiya":"العيدية","Enjoy it!":"بالهنا!","Enter today's gold price above first.":"اكتب سعر الذهب اليوم بالأعلى أولًا.","Enter your PIN":"اكتب رمزك السري","Erase ALL data on this device?":"مسح كل البيانات على هذا الجهاز؟","Erase everything":"مسح كل شيء","Exact":"بالضبط","Family":"العيلة","Final":"نهائي","First month":"أول شهر","For every (saved)":"لكل (مدّخر)","Forgot PIN?":"نسيت الرمز؟","For…":"لـ…","Friends outings":"خروجات الأصحاب","From":"من","From whom?":"من مين؟","Fully paid.":"تم السداد بالكامل.","Gave sadaqah":"أخرجت صدقة","Give sadaqah":"أخرج الصدقة","Give {x} as sadaqah":"أخرج {x} صدقة","Goals":"الأهداف","Gold & zakat":"الذهب والزكاة","Gold & zakat rules":"قواعد الذهب والزكاة","Gold bought: {x}":"ذهب تم شراؤه: {x}","Gold purchase":"شراء ذهب","Gold worth {x}":"ذهب قيمته {x}","Got money? Tap “Money in” and Mizan splits it for you.":"جالك فلوس؟ اضغط «فلوس جت» وميزان يقسّمها لك.","Grams (optional)":"الوزن بالجرام (اختياري)","Grandmother":"تيتا","History":"السجل","Home":"الرئيسية","How money is split":"طريقة تقسيم الفلوس","How much did you pay?":"دفعت كام؟","I borrowed":"استلفت","I borrowed money":"استلفت فلوس","I bought the gold":"اشتريت الذهب","I gave sadaqah":"أخرجت صدقة","I lent":"سلّفت","I lent money":"سلّفت فلوس","I paid back":"سدّدت","I paid zakat":"أخرجت الزكاة","If you forget your PIN, your data can't be opened — not even from a backup.":"لو نسيت رمزك، لا يمكن فتح بياناتك — ولا حتى من نسخة احتياطية.","In":"داخل","Karat":"العيار","Keep some for something specific":"خصّص جزءًا لشيء معيّن","Language":"اللغة","Loans":"السلف والديون","Lock":"اقفل","Locked with your PIN":"مقفولة برمزك","Made a mistake? You can undo for 10 minutes. After that it's final.":"غلطت؟ تقدر تتراجع خلال 10 دقائق. بعدها يصبح نهائيًا.","May it be accepted.":"تقبّل الله.","Me":"مصروفي","Mizan":"ميزان","Money in":"فلوس جت","Money out":"فلوس خرجت","Money sources":"مصادر الفلوس","Money-in entries can be undone for 10 minutes, then they're final.":"قيود الفلوس الداخلة يمكن التراجع عنها خلال 10 دقائق، بعدها تصبح نهائية.","Monthly report":"التقرير الشهري","More":"المزيد","Move":"نقل","Move money":"نقل فلوس","Moved {a} → {b}":"نقل من {a} إلى {b}","Moved.":"تم النقل.","Name of the new pot:":"اسم البند الجديد:","New":"جديد","New PIN (4–6 digits)":"الرمز الجديد (4–6 أرقام)","New PIN again":"الرمز الجديد مرة أخرى","New goal":"هدف جديد","New source":"مصدر جديد","Next month":"الشهر التالي","Nisab grams":"جرامات النصاب","Nisab: {g} g of {k}k gold (Dar al-Ifta). Lunar year. For your exact case, ask a scholar.":"النصاب: {g} جرام ذهب عيار {k} (دار الإفتاء). عام هجري. لحالتك بالتحديد اسأل عالمًا.","No gold yet.":"لا يوجد ذهب بعد.","No open loans.":"لا توجد سلف مفتوحة.","Note":"ملاحظة","Nothing here yet.":"لا يوجد شيء بعد.","Nour":"نور","Now buy gold for {x}":"اشترِ الآن ذهبًا بـ {x}","On track":"على الطريق","Only {x} could be kept aside.":"أمكن تخصيص {x} فقط.","Open":"افتح","Open Mizan from its file on your laptop, or its icon on your phone.":"افتح ميزان من ملفه على اللابتوب، أو من أيقونته على الموبايل.","Other":"أخرى","Out":"خارج","Owed to you":"لك","Owed to you {a} · You owe {b}":"لك {a} · عليك {b}","PIN changed.":"تم تغيير الرمز.","PIN must be 4 to 6 digits.":"الرمز يجب أن يكون من 4 إلى 6 أرقام.","Paid from savings ({x}).":"يُدفع من الادخار ({x}).","Paid zakat":"أخرجت الزكاة","Pay from":"يُدفع من","Pay zakat":"أخرج الزكاة","Pay {x} (2.5%).":"أخرج {x} (2.5%).","Pick two different pots.":"اختر بندين مختلفين.","Premiere event":"إيفنت بريمير","Previous month":"الشهر السابق","Price":"السعر","Put into":"أضيفت إلى","Ready":"جاهز","Remove":"حذف","Remove this pot?":"حذف هذا البند؟","Remove “{s}”? Old entries stay.":"حذف «{s}»؟ القيود القديمة ستبقى.","Replace everything here with this backup?":"استبدال كل شيء هنا بهذه النسخة؟","Restore a backup":"استعادة نسخة احتياطية","Rounding":"التقريب","Sadaqah":"الصدقة","Sadaqah and savings are taken first.":"الصدقة والادخار يُحسبان أولًا.","Sadaqah and savings come from the full amount. The rest is shared by the other pots.":"الصدقة والادخار من المبلغ كاملًا، والباقي يتقسّم على البنود الأخرى.","Sadaqah given":"صدقة أُخرجت","Sadaqah rounds up. Leftovers go to “Me”.":"الصدقة تُقرَّب لأعلى، والباقي يذهب إلى «مصروفي».","Same as last month":"نفس الشهر الماضي","Save":"حفظ","Save a backup":"حفظ نسخة احتياطية","Save an unlocked copy":"حفظ نسخة غير مقفولة","Save {x}":"ادّخر {x}","Saved":"المدّخر","Saved to your Downloads.":"تم الحفظ في التنزيلات.","Saved.":"تم الحفظ.","Savings & gold":"الادخار والذهب","Security & backup":"الأمان والنسخ الاحتياطي","Settings":"الإعدادات","Settled":"تم سدادها","Special split for {s}":"تقسيم خاص لـ {s}","Spend":"اصرف","Spent":"المصروف","Start date":"تاريخ البداية","Taken from":"مأخوذة من","Taken from {p}.":"تُخصم من {p}.","Tap ★ to give a source its own split, e.g. more savings from Eidiya.":"اضغط ★ لتعطي مصدرًا تقسيمًا خاصًا، مثلًا ادخار أكثر من العيدية.","That's more than what's left.":"هذا أكثر من المتبقي.","The day your money first reached nisab, or the day you last paid zakat.":"اليوم الذي بلغ فيه مالك النصاب أول مرة، أو آخر يوم أخرجت فيه الزكاة.","The new PINs don't match.":"الرمزان الجديدان غير متطابقين.","They didn't match. Try again.":"غير متطابقين. حاول مرة أخرى.","They paid back":"ردّها","This backup uses a different PIN.":"هذه النسخة برمز مختلف.","This isn't a Mizan backup.":"هذا ليس نسخة احتياطية لميزان.","This pot has {x}. It will move to “Me”. Remove it?":"في هذا البند {x}، وسيتم نقلها إلى «مصروفي». حذفه؟","To":"إلى","To do":"مطلوب منك","To whom?":"لمين؟","To {n}":"لأقرب {n}","To-buy list":"قائمة المشتريات","Today's price, 1 g of 21k":"سعر اليوم، جرام عيار 21","Too late — this entry is final now.":"فات الوقت — هذا القيد أصبح نهائيًا.","Too many tries. Wait {n} seconds.":"محاولات كثيرة. انتظر {n} ثانية.","Total must be 100%.":"المجموع لازم يكون 100%.","Total: {x}%":"المجموع: {x}%","Type a price.":"اكتب السعر.","Type it again":"اكتبه مرة أخرى","Type the amount":"اكتب المبلغ","Type the amount.":"اكتب المبلغ.","Undo":"تراجع","Undo {x} from {s}? You can enter it again.":"التراجع عن {x} من {s}؟ تقدر تدخلها من جديد.","Undone.":"تم التراجع.","Updated {d}":"آخر تحديث {d}","Used only for money from {s}.":"يُستخدم فقط للفلوس القادمة من {s}.","What do you want?":"عايز تشتري إيه؟","What for?":"على إيه؟","Who is it from?":"الفلوس من مين؟","Without the PIN your data can't be opened. Erase everything and start again?":"بدون الرمز لا يمكن فتح بياناتك. تمسح كل شيء وتبدأ من جديد؟","Works offline. Nothing leaves this device.":"يعمل بدون إنترنت. لا شيء يغادر هذا الجهاز.","Worth now":"قيمته الآن","Wrong PIN.":"رمز خاطئ.","Wrong PIN. Wait {n} seconds.":"رمز خاطئ. انتظر {n} ثانية.","Year started {s}. What counts is {d}.":"بدأ العام في {s}. والعبرة بيوم {d}.","You can buy “{n}” now":"تقدر تشتري «{n}» الآن","You owe":"عليك","You paid":"دفعت","Your gold":"ذهبك","Your plan":"خطتك","Your pots":"بنودك","Your wealth {w} · Nisab {n}":"مالك {w} · النصاب {n}","Yours to spend":"مصروفك","Zakat":"الزكاة","Zakat paid":"زكاة أُخرجت","Zakat year start":"بداية عام الزكاة","by {d}":"قبل {d}","incl. {x}":"منها {x}","owes you":"عليه لك","vs last month":"عن الشهر الماضي","you owe":"عليك","{n} min":"{n} دقيقة","{p} only has {x}. Continue?":"في {p} {x} فقط. تكمل؟","{x} for {p}":"{x} لـ {p}","{x} from {s}":"{x} من {s}","{x} is yours":"{x} لك","{x} more to reach nisab.":"باقي {x} لبلوغ النصاب.","{x} of {y} left":"باقي {x} من {y}","{x} to go":"باقي {x}","Sadaqah this time":"الصدقة هذه المرة","Normal: {p}%":"العادي: {p}%","Extra sadaqah this time":"صدقة زيادة هذه المرة","{x} instead of {y}. The other pots get less from this money only. Next time it's back to {p}%.":"{x} بدلًا من {y}. البنود الأخرى تأخذ أقل من هذه الفلوس فقط. المرة القادمة ترجع {p}%.","Only this money is affected. Next time it's back to {p}%.":"هذه الفلوس فقط تتأثر. المرة القادمة ترجع {p}%.","Extra sadaqah this time ({p}%)":"صدقة زيادة هذه المرة ({p}%)","sadaqah {p}%":"صدقة {p}%","e.g. Nour, things to buy, outings":"مثلًا: نور، مشتريات، خروجات","Add a source":"إضافة مصدر","Where does your money come from? e.g. Dad, Eidiya, an event.":"فلوسك بتيجي منين؟ مثلًا: بابا، العيدية، إيفنت.","Edit pot":"تعديل البند","New pot":"بند جديد","Name":"الاسم","e.g. Nour":"مثلًا: نور","Icon":"الأيقونة","Color":"اللون","Share of each income":"نصيبه من كل دخل","“Me” will get {p}%":"«مصروفي» سيأخذ {p}%","Give it a name.":"اكتب اسمًا.","Pot added.":"تمت إضافة البند.","Who or where the money comes from.":"مين أو منين الفلوس جاية.","e.g. Dad":"مثلًا: بابا","Remove pot":"حذف البند","No sources yet.":"لا توجد مصادر بعد.","Reset pot":"تصفير البند","Reset {p}":"تصفير {p}","{p} goes from {x} back to 0.":"{p} سيرجع من {x} إلى صفر.","Where should the money go?":"الفلوس تروح فين؟","Nowhere, it's gone":"مش هتروح، الفلوس خلصت","You can undo this from History.":"تقدر تتراجع عن هذا من السجل.","Reset":"تصفير","{p} is now 0.":"{p} الآن صفر.","Reset {p} → {q}":"تصفير {p} إلى {q}","Pots":"البنود","Savings":"الادخار","Savings target":"هدف الادخار","Savings target reached!":"وصلت لهدف الادخار!","Target reached!":"وصلت للهدف!","Set a new target":"حدّد هدفًا جديدًا","{x} to go of {y}":"باقي {x} من {y}","Cash + gold you've saved":"الفلوس والذهب اللي ادّخرتهم","Set a target":"حدّد هدفًا","The battery fills up as your savings (cash + gold) get closer to this.":"البطارية تتملي كل ما ادخارك (فلوس + ذهب) يقرب من الهدف ده.","Remove target":"إلغاء الهدف","Got money? Tap + Add and Mizan splits it for you.":"جالك فلوس؟ اضغط + إضافة وميزان يقسّمها لك.","Set a target to fill the battery":"حدّد هدفًا لتملأ البطارية","Cash {a} · Gold {b}":"فلوس {a} · ذهب {b}","Great job!":"عاش!","Well done!":"أحسنت!","Keep going!":"كمّل كده!","Your future self thanks you!":"مستقبلك بيشكرك!","Nice! Savings growing.":"حلو! ادخارك بيكبر.","of {y}":"من {y}"}/*AR-END*/;
+const AR = /*AR-START*/{"(must be 100%)":"(لازم يكون 100%)","4 to 6 digits, then press ✓.":"من 4 إلى 6 أرقام، ثم اضغط ✓.","Above nisab":"فوق النصاب","Add":"إضافة","Add a name and a price.":"اكتب الاسم والسعر.","Add a name and an amount.":"اكتب الاسم والمبلغ.","Add a pot":"إضافة بند","Add about {x} a month to make it.":"زوّد حوالي {x} في الشهر علشان تلحق.","Add gold purchase":"تسجيل شراء ذهب","Add something you want to buy. Mizan tells you when you can afford it.":"أضف شيئًا تريد شراءه، وميزان يقول لك متى تقدر تشتريه.","Added {x} from {s}":"أضفت {x} من {s}","Added. Give it a % so the total is 100%.":"تمت الإضافة. أعطه نسبة ليصبح المجموع 100%.","Advanced":"إعدادات متقدمة","All":"الكل","Already there.":"موجود بالفعل.","Amount":"المبلغ","Anyone who opens this file can read your data. Continue?":"أي شخص يفتح هذا الملف يستطيع قراءة بياناتك. متابعة؟","Are you sure? This can't be undone.":"هل أنت متأكد؟ لا يمكن التراجع عن هذا.","Aunt":"طنط","Auto-lock":"القفل التلقائي","Back":"رجوع","Back to normal split":"ارجع للتقسيم العادي","Backup PIN":"رمز النسخة الاحتياطية","Backup restored.":"تمت استعادة النسخة.","Behind":"متأخر","Below nisab":"أقل من النصاب","Bought":"اشتريت","Bought gold":"شراء ذهب","Bought “{n}”":"اشتريت «{n}»","Buy gold":"اشترِ ذهب","Buy gold worth":"اشترِ ذهبًا بقيمة","Buy now: {x}":"اشترِ الآن: {x}","By when? (optional)":"قبل تاريخ؟ (اختياري)","Came in":"الوارد","Cancel":"إلغاء","Change":"تغيير","Change PIN":"تغيير الرمز","Choose a PIN":"اختر رمزًا سريًا","Close":"إغلاق","Couldn't save. Export a backup now.":"تعذّر الحفظ. احفظ نسخة احتياطية الآن.","Current PIN":"الرمز الحالي","Current PIN is wrong.":"الرمز الحالي غير صحيح.","Dad":"بابا","Danger zone":"منطقة الخطر","Date":"التاريخ","Date passed":"فات الموعد","Delete":"حذف","Delete goal":"حذف الهدف","Delete this entry?":"حذف هذا القيد؟","Delete this goal?":"حذف هذا الهدف؟","Delete this loan?":"حذف هذا الدَّين؟","Deleted.":"تم الحذف.","Done":"تم","Done. Don't forget your PIN.":"تم. لا تنسَ رمزك.","Due now":"واجبة الآن","Due on {d} if you stay above nisab — about {x}.":"تجب في {d} لو ظللت فوق النصاب — حوالي {x}.","EGP":"جنيه","Edit":"تعديل","Edit goal":"تعديل الهدف","Eidiya":"العيدية","Enjoy it!":"بالهنا!","Enter today's gold price above first.":"اكتب سعر الذهب اليوم بالأعلى أولًا.","Enter your PIN":"اكتب رمزك السري","Erase ALL data on this device?":"مسح كل البيانات على هذا الجهاز؟","Erase everything":"مسح كل شيء","Exact":"بالضبط","Family":"العيلة","Final":"نهائي","First month":"أول شهر","For every (saved)":"لكل (مدّخر)","Forgot PIN?":"نسيت الرمز؟","For…":"لـ…","Friends outings":"خروجات الأصحاب","From":"من","From whom?":"من مين؟","Fully paid.":"تم السداد بالكامل.","Gave sadaqah":"أخرجت صدقة","Give sadaqah":"أخرج الصدقة","Give {x} as sadaqah":"أخرج {x} صدقة","Goals":"الأهداف","Gold & zakat":"الذهب والزكاة","Gold & zakat rules":"قواعد الذهب والزكاة","Gold bought: {x}":"ذهب تم شراؤه: {x}","Gold purchase":"شراء ذهب","Gold worth {x}":"ذهب قيمته {x}","Got money? Tap “Money in” and Mizan splits it for you.":"جالك فلوس؟ اضغط «فلوس جت» وميزان يقسّمها لك.","Grams (optional)":"الوزن بالجرام (اختياري)","Grandmother":"تيتا","History":"السجل","Home":"الرئيسية","How money is split":"طريقة تقسيم الفلوس","How much did you pay?":"دفعت كام؟","I borrowed":"استلفت","I borrowed money":"استلفت فلوس","I bought the gold":"اشتريت الذهب","I gave sadaqah":"أخرجت صدقة","I lent":"سلّفت","I lent money":"سلّفت فلوس","I paid back":"سدّدت","I paid zakat":"أخرجت الزكاة","If you forget your PIN, your data can't be opened — not even from a backup.":"لو نسيت رمزك، لا يمكن فتح بياناتك — ولا حتى من نسخة احتياطية.","In":"داخل","Karat":"العيار","Keep some for something specific":"خصّص جزءًا لشيء معيّن","Language":"اللغة","Loans":"السلف والديون","Lock":"اقفل","Locked with your PIN":"مقفولة برمزك","Made a mistake? You can undo for 10 minutes. After that it's final.":"غلطت؟ تقدر تتراجع خلال 10 دقائق. بعدها يصبح نهائيًا.","May it be accepted.":"تقبّل الله.","Me":"مصروفي","Mizan":"ميزان","Money in":"فلوس جت","Money out":"فلوس خرجت","Money sources":"مصادر الفلوس","Money-in entries can be undone for 10 minutes, then they're final.":"قيود الفلوس الداخلة يمكن التراجع عنها خلال 10 دقائق، بعدها تصبح نهائية.","Monthly report":"التقرير الشهري","More":"المزيد","Move":"نقل","Move money":"نقل فلوس","Moved {a} → {b}":"نقل من {a} إلى {b}","Moved.":"تم النقل.","Name of the new pot:":"اسم البند الجديد:","New":"جديد","New PIN (4–6 digits)":"الرمز الجديد (4–6 أرقام)","New PIN again":"الرمز الجديد مرة أخرى","New goal":"هدف جديد","New source":"مصدر جديد","Next month":"الشهر التالي","Nisab grams":"جرامات النصاب","Nisab: {g} g of {k}k gold (Dar al-Ifta). Lunar year. For your exact case, ask a scholar.":"النصاب: {g} جرام ذهب عيار {k} (دار الإفتاء). عام هجري. لحالتك بالتحديد اسأل عالمًا.","No gold yet.":"لا يوجد ذهب بعد.","No open loans.":"لا توجد سلف مفتوحة.","Note":"ملاحظة","Nothing here yet.":"لا يوجد شيء بعد.","Nour":"نور","Now buy gold for {x}":"اشترِ الآن ذهبًا بـ {x}","On track":"على الطريق","Only {x} could be kept aside.":"أمكن تخصيص {x} فقط.","Open":"افتح","Open Mizan from its file on your laptop, or its icon on your phone.":"افتح ميزان من ملفه على اللابتوب، أو من أيقونته على الموبايل.","Other":"أخرى","Out":"خارج","Owed to you":"لك","Owed to you {a} · You owe {b}":"لك {a} · عليك {b}","PIN changed.":"تم تغيير الرمز.","PIN must be 4 to 6 digits.":"الرمز يجب أن يكون من 4 إلى 6 أرقام.","Paid from savings ({x}).":"يُدفع من الادخار ({x}).","Paid zakat":"أخرجت الزكاة","Pay from":"يُدفع من","Pay zakat":"أخرج الزكاة","Pay {x} (2.5%).":"أخرج {x} (2.5%).","Pick two different pots.":"اختر بندين مختلفين.","Premiere event":"إيفنت بريمير","Previous month":"الشهر السابق","Price":"السعر","Put into":"أضيفت إلى","Ready":"جاهز","Remove":"حذف","Remove this pot?":"حذف هذا البند؟","Remove “{s}”? Old entries stay.":"حذف «{s}»؟ القيود القديمة ستبقى.","Replace everything here with this backup?":"استبدال كل شيء هنا بهذه النسخة؟","Restore a backup":"استعادة نسخة احتياطية","Rounding":"التقريب","Sadaqah":"الصدقة","Sadaqah and savings are taken first.":"الصدقة والادخار يُحسبان أولًا.","Sadaqah and savings come from the full amount. The rest is shared by the other pots.":"الصدقة والادخار من المبلغ كاملًا، والباقي يتقسّم على البنود الأخرى.","Sadaqah given":"صدقة أُخرجت","Sadaqah rounds up. Leftovers go to “Me”.":"الصدقة تُقرَّب لأعلى، والباقي يذهب إلى «مصروفي».","Same as last month":"نفس الشهر الماضي","Save":"حفظ","Save a backup":"حفظ نسخة احتياطية","Save an unlocked copy":"حفظ نسخة غير مقفولة","Save {x}":"ادّخر {x}","Saved":"المدّخر","Saved to your Downloads.":"تم الحفظ في التنزيلات.","Saved.":"تم الحفظ.","Savings & gold":"الادخار والذهب","Security & backup":"الأمان والنسخ الاحتياطي","Settings":"الإعدادات","Settled":"تم سدادها","Special split for {s}":"تقسيم خاص لـ {s}","Spend":"اصرف","Spent":"المصروف","Start date":"تاريخ البداية","Taken from":"مأخوذة من","Taken from {p}.":"تُخصم من {p}.","Tap ★ to give a source its own split, e.g. more savings from Eidiya.":"اضغط ★ لتعطي مصدرًا تقسيمًا خاصًا، مثلًا ادخار أكثر من العيدية.","That's more than what's left.":"هذا أكثر من المتبقي.","The day your money first reached nisab, or the day you last paid zakat.":"اليوم الذي بلغ فيه مالك النصاب أول مرة، أو آخر يوم أخرجت فيه الزكاة.","The new PINs don't match.":"الرمزان الجديدان غير متطابقين.","They didn't match. Try again.":"غير متطابقين. حاول مرة أخرى.","They paid back":"ردّها","This backup uses a different PIN.":"هذه النسخة برمز مختلف.","This isn't a Mizan backup.":"هذا ليس نسخة احتياطية لميزان.","This pot has {x}. It will move to “Me”. Remove it?":"في هذا البند {x}، وسيتم نقلها إلى «مصروفي». حذفه؟","To":"إلى","To do":"مطلوب منك","To whom?":"لمين؟","To {n}":"لأقرب {n}","To-buy list":"قائمة المشتريات","Today's price, 1 g of 21k":"سعر اليوم، جرام عيار 21","Too late — this entry is final now.":"فات الوقت — هذا القيد أصبح نهائيًا.","Too many tries. Wait {n} seconds.":"محاولات كثيرة. انتظر {n} ثانية.","Total must be 100%.":"المجموع لازم يكون 100%.","Total: {x}%":"المجموع: {x}%","Type a price.":"اكتب السعر.","Type it again":"اكتبه مرة أخرى","Type the amount":"اكتب المبلغ","Type the amount.":"اكتب المبلغ.","Undo":"تراجع","Undo {x} from {s}? You can enter it again.":"التراجع عن {x} من {s}؟ تقدر تدخلها من جديد.","Undone.":"تم التراجع.","Updated {d}":"آخر تحديث {d}","Used only for money from {s}.":"يُستخدم فقط للفلوس القادمة من {s}.","What do you want?":"عايز تشتري إيه؟","What for?":"على إيه؟","Who is it from?":"الفلوس من مين؟","Without the PIN your data can't be opened. Erase everything and start again?":"بدون الرمز لا يمكن فتح بياناتك. تمسح كل شيء وتبدأ من جديد؟","Works offline. Nothing leaves this device.":"يعمل بدون إنترنت. لا شيء يغادر هذا الجهاز.","Worth now":"قيمته الآن","Wrong PIN.":"رمز خاطئ.","Wrong PIN. Wait {n} seconds.":"رمز خاطئ. انتظر {n} ثانية.","Year started {s}. What counts is {d}.":"بدأ العام في {s}. والعبرة بيوم {d}.","You can buy “{n}” now":"تقدر تشتري «{n}» الآن","You owe":"عليك","You paid":"دفعت","Your gold":"ذهبك","Your plan":"خطتك","Your pots":"بنودك","Your wealth {w} · Nisab {n}":"مالك {w} · النصاب {n}","Yours to spend":"مصروفك","Zakat":"الزكاة","Zakat paid":"زكاة أُخرجت","Zakat year start":"بداية عام الزكاة","by {d}":"قبل {d}","incl. {x}":"منها {x}","owes you":"عليه لك","vs last month":"عن الشهر الماضي","you owe":"عليك","{n} min":"{n} دقيقة","{p} only has {x}. Continue?":"في {p} {x} فقط. تكمل؟","{x} for {p}":"{x} لـ {p}","{x} from {s}":"{x} من {s}","{x} is yours":"{x} لك","{x} more to reach nisab.":"باقي {x} لبلوغ النصاب.","{x} of {y} left":"باقي {x} من {y}","{x} to go":"باقي {x}","Sadaqah this time":"الصدقة هذه المرة","Normal: {p}%":"العادي: {p}%","Extra sadaqah this time":"صدقة زيادة هذه المرة","{x} instead of {y}. The other pots get less from this money only. Next time it's back to {p}%.":"{x} بدلًا من {y}. البنود الأخرى تأخذ أقل من هذه الفلوس فقط. المرة القادمة ترجع {p}%.","Only this money is affected. Next time it's back to {p}%.":"هذه الفلوس فقط تتأثر. المرة القادمة ترجع {p}%.","Extra sadaqah this time ({p}%)":"صدقة زيادة هذه المرة ({p}%)","sadaqah {p}%":"صدقة {p}%","e.g. Nour, things to buy, outings":"مثلًا: نور، مشتريات، خروجات","Add a source":"إضافة مصدر","Where does your money come from? e.g. Dad, Eidiya, an event.":"فلوسك بتيجي منين؟ مثلًا: بابا، العيدية، إيفنت.","Edit pot":"تعديل البند","New pot":"بند جديد","Name":"الاسم","e.g. Nour":"مثلًا: نور","Icon":"الأيقونة","Color":"اللون","Share of each income":"نصيبه من كل دخل","“Me” will get {p}%":"«مصروفي» سيأخذ {p}%","Give it a name.":"اكتب اسمًا.","Pot added.":"تمت إضافة البند.","Who or where the money comes from.":"مين أو منين الفلوس جاية.","e.g. Dad":"مثلًا: بابا","Remove pot":"حذف البند","No sources yet.":"لا توجد مصادر بعد.","Reset pot":"تصفير البند","Reset {p}":"تصفير {p}","{p} goes from {x} back to 0.":"{p} سيرجع من {x} إلى صفر.","Where should the money go?":"الفلوس تروح فين؟","Nowhere, it's gone":"مش هتروح، الفلوس خلصت","You can undo this from History.":"تقدر تتراجع عن هذا من السجل.","Reset":"تصفير","{p} is now 0.":"{p} الآن صفر.","Reset {p} → {q}":"تصفير {p} إلى {q}","Pots":"البنود","Savings":"الادخار","Savings target":"هدف الادخار","Savings target reached!":"وصلت لهدف الادخار!","Target reached!":"وصلت للهدف!","Set a new target":"حدّد هدفًا جديدًا","{x} to go of {y}":"باقي {x} من {y}","Cash + gold you've saved":"الفلوس والذهب اللي ادّخرتهم","Set a target":"حدّد هدفًا","The battery fills up as your savings (cash + gold) get closer to this.":"البطارية تتملي كل ما ادخارك (فلوس + ذهب) يقرب من الهدف ده.","Remove target":"إلغاء الهدف","Got money? Tap + Add and Mizan splits it for you.":"جالك فلوس؟ اضغط + إضافة وميزان يقسّمها لك.","Set a target to fill the battery":"حدّد هدفًا لتملأ البطارية","Cash {a} · Gold {b}":"فلوس {a} · ذهب {b}","Great job!":"عاش!","Well done!":"أحسنت!","Keep going!":"كمّل كده!","Your future self thanks you!":"مستقبلك بيشكرك!","Nice! Savings growing.":"حلو! ادخارك بيكبر.","of {y}":"من {y}","Open this backup":"فتح النسخة الاحتياطية","Enter the PIN or the recovery code this backup was made with.":"اكتب الرمز السري أو كود الاسترجاع الخاص بهذه النسخة.","That doesn't open this backup.":"هذا لا يفتح هذه النسخة.","New PIN (4–8 digits)":"الرمز الجديد (4–8 أرقام)","PIN must be 4 to 8 digits.":"الرمز يجب أن يكون من 4 إلى 8 أرقام.","Recovery code":"كود الاسترجاع","If you ever forget your PIN, this code is the only way to open Mizan and your backups.":"لو نسيت رمزك السري، الكود ده هو الطريقة الوحيدة لفتح ميزان ونسخك الاحتياطية.","You have a recovery code.":"عندك كود استرجاع.","You don't have a recovery code yet.":"لسه معندكش كود استرجاع.","Make a new code":"اعمل كود جديد","Create my code":"اعمل الكود بتاعي","Making a new code turns the old one off.":"عمل كود جديد بيلغي القديم.","Recovery code saved.":"تم حفظ كود الاسترجاع.","Your recovery code":"كود الاسترجاع بتاعك","Write it on paper or save it somewhere safe (not only on this phone). If you forget your PIN, this code is the only way in. It won't be shown again.":"اكتبه على ورقة أو احفظه في مكان آمن (مش على الموبايل ده بس). لو نسيت رمزك، الكود ده هو الطريقة الوحيدة للدخول. مش هيظهر تاني.","Copy":"نسخ","I saved it":"حفظته","I wrote down my recovery code":"كتبت كود الاسترجاع","Copied.":"تم النسخ.","4 to 8 digits, then press ✓.":"من 4 إلى 8 أرقام، ثم اضغط ✓.","Securing your data…":"جاري تأمين بياناتك…","Use your recovery code":"استخدم كود الاسترجاع","Type the code you wrote down when you set up Mizan.":"اكتب الكود اللي كتبته لما عملت ميزان.","Continue":"متابعة","I lost the code too":"ضيّعت الكود كمان","Choose a new PIN":"اختر رمزًا جديدًا","New PIN set.":"تم ضبط الرمز الجديد.","That code doesn't match.":"الكود ده مش مطابق.","Set up":"مُفعّل","Not set up yet":"غير مُفعّل بعد","Never saved":"لم تُحفظ أبدًا","Last saved {n} days ago":"آخر حفظ من {n} يوم","Backups open with your PIN or your recovery code.":"النسخ الاحتياطية تفتح برمزك أو بكود الاسترجاع.","Create a recovery code":"اعمل كود استرجاع","So a forgotten PIN isn't the end":"علشان لو نسيت الرمز متخسرش كل حاجة","You haven't saved one yet":"لسه محفظتش أي نسخة","Last one was {n} days ago":"آخر نسخة من {n} يوم","Last saved today":"آخر حفظ اليوم"}/*AR-END*/;
 const POT_NAMES = { sadaqah:"Sadaqah", savings:"Savings & gold", me:"Me", nour:"Nour", tobuy:"To-buy list", friends:"Friends outings" };
 const MISSING = new Set();
 function lang(){ return (state && state.settings && state.settings.lang) || localStorage.getItem("mizan.lang") || "en"; }
@@ -327,9 +333,7 @@ function applyLang(){
 
 /* ================= storage & crypto ================= */
 const KEY_ENC = "mizan.enc.v1", KEY_PLAIN = "mizan.v1", KEY_FAILS = "mizan.fails";
-const ITER = 250000;
-const UNDO_MS = 10*60*1000;     // money-in entries can be undone for 10 minutes after saving
-let state = null, cryptoKey = null, meta = null;
+let state = null, cryptoKey = null, dataKeyRaw = null, meta = null;   // meta = { len, wraps:{pin, rec} }
 let saveChain = Promise.resolve();
 
 const DEFAULTS = () => ({
@@ -366,31 +370,16 @@ function migrate(s){
   s.version = 4;
   return s;
 }
-const enc = new TextEncoder(), dec = new TextDecoder();
-const b64 = u8 => btoa(String.fromCharCode(...u8));
-const unb64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
-async function deriveKey(pin, salt, iter){
-  const base = await crypto.subtle.importKey("raw", enc.encode(pin), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
-}
-async function sealWith(key, m, obj){
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const ct = new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, enc.encode(JSON.stringify(obj))));
-  return { app:"mizan", v:1, salt:b64(m.salt), iter:m.iter, len:m.len, iv:b64(iv), ct:b64(ct) };
-}
-async function openWith(key, blob){
-  const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:unb64(blob.iv)}, key, unb64(blob.ct));
-  return JSON.parse(dec.decode(pt));
-}
 function save(){
   if(!cryptoKey || !state) return;
-  const snapshot = JSON.parse(JSON.stringify(state)), key = cryptoKey, m = meta;
+  const snapshot = JSON.parse(JSON.stringify(state)), key = cryptoKey, header = { len: meta.len, wraps: meta.wraps };
   saveChain = saveChain.then(async ()=>{
-    try{ localStorage.setItem(KEY_ENC, JSON.stringify(await sealWith(key, m, snapshot))); }
+    try{ localStorage.setItem(KEY_ENC, JSON.stringify(await V.seal(key, snapshot, header))); }
     catch(e){ toast(t("Couldn't save. Export a backup now.")); }
   });
   return saveChain;
 }
+async function useDataKey(raw){ dataKeyRaw = raw; cryptoKey = await V.importDataKey(raw); }
 function readBlob(){ try{ const r = localStorage.getItem(KEY_ENC); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
 function hasLegacy(){ try{ return !!localStorage.getItem(KEY_PLAIN); }catch(e){ return false; } }
 if(navigator.storage && navigator.storage.persist){ try{ navigator.storage.persist(); }catch(e){} }
@@ -418,20 +407,12 @@ function adopt(s){
 }
 
 /* ================= helpers ================= */
-function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
-function today(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
-function addDays(s,n){ const d=new Date(s+"T12:00:00"); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
-function daysBetween(a,b){ return Math.round((new Date(b+"T12:00:00") - new Date(a+"T12:00:00"))/86400000); }
-function r2(x){ return Math.round(x*100)/100; }
 function fmt(x){ return r2(x).toLocaleString("en-US",{maximumFractionDigits:2}); }
 function egp(x){ return fmt(x) + " " + t("EGP"); }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function loc(){ return lang()==="ar" ? "ar-EG-u-nu-latn" : "en-GB"; }
 function niceDate(s){ return new Date(s+"T12:00:00").toLocaleDateString(loc(),{day:"numeric",month:"short",year:"numeric"}); }
-function monthKey(s){ return s.slice(0,7); }
 function monthName(k){ return new Date(k+"-15T12:00:00").toLocaleDateString(loc(),{month:"long",year:"numeric"}); }
-function shiftMonth(k,n){ const d=new Date(k+"-15T12:00:00"); d.setMonth(d.getMonth()+n); return d.toISOString().slice(0,7); }
-function num(v){ const n=parseFloat(String(v).replace(/,/g,"").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d))); return isFinite(n)?n:0; }
 function pot(id){ return state.settings.pots.find(p=>p.id===id) || (state.removedPots||[]).find(p=>p.id===id) || {id, name:id, color:"#888", pct:0, base:"rest", custom:true}; }
 function potName(p){ if(typeof p==="string") p = pot(p); return (p.custom || !POT_NAMES[p.id]) ? (p.name||p.id) : t(POT_NAMES[p.id]); }
 function $(s){ return document.querySelector(s); }
@@ -468,12 +449,6 @@ function burst(kind){
 }
 
 /* ================= undo window ================= */
-function undoLeft(inc){                       // ms left to undo; 0 means final
-  if(!inc || !inc.createdAt) return 0;
-  const age = Date.now() - inc.createdAt;
-  if(age < 0) return 0;                       // clock moved back: treat as final
-  return Math.max(0, UNDO_MS - age);
-}
 function mmss(ms){ const s=Math.ceil(ms/1000); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
 function undoable(){ return state.incomes.filter(i=>undoLeft(i)>0).sort((a,b)=>b.createdAt-a.createdAt); }
 setInterval(()=>{
@@ -487,83 +462,9 @@ setInterval(()=>{
 }, 1000);
 
 /* ================= split engine ================= */
-function pctsFor(source){
-  const rule = source && state.settings.sourceRules[source];
-  const out = {}; state.settings.pots.forEach(p=> out[p.id] = rule ? (num(rule[p.id])||0) : p.pct);
-  return out;
-}
-function computeSplit(amount, earmark, source, sadPct){
-  const S = state.settings, r = S.rounding || 1, pots = S.pots, pc = pctsFor(source);
-  if(sadPct!=null && sadPct>pc.sadaqah) pc.sadaqah = sadPct;   // extra sadaqah for this entry only
-  const out = {}; pots.forEach(p=>out[p.id]=0);
-  if(!(amount>0)) return { split: out, ear: 0, capped: false };
-  const up = x=>Math.ceil(x/r-1e-9)*r, near = x=>Math.round(x/r)*r, down = x=>Math.floor(x/r+1e-9)*r;
-  let left = amount;
-  for(const p of pots.filter(p=>p.base==="gross")){
-    let v = p.id==="sadaqah" ? up(amount*pc[p.id]/100) : near(amount*pc[p.id]/100);
-    v = Math.max(0, Math.min(v, left)); out[p.id] = v; left -= v;
-  }
-  let ear = 0;
-  if(earmark && earmark.pot && earmark.amount>0 && out.hasOwnProperty(earmark.pot)){ ear = Math.min(earmark.amount, left); out[earmark.pot] += ear; left -= ear; }
-  const flex = pots.filter(p=>p.base==="rest"), tot = flex.reduce((s,p)=>s+pc[p.id],0), pool = left;
-  for(const p of flex){ if(p.id==="me") continue; const v = tot ? Math.max(0, Math.min(down(pool*pc[p.id]/tot), left)) : 0; out[p.id] += v; left -= v; }
-  out.me = (out.me||0) + left;
-  for(const k in out) out[k] = r2(out[k]);
-  return { split: out, ear: r2(ear), capped: !!(earmark && earmark.amount>ear+1e-9) };
-}
 
 /* ================= balances & derived numbers ================= */
-function loanPaid(l){ return (l.pays||[]).reduce((s,p)=>s+p.amount,0); }
-function balances(){
-  const b = {}; state.settings.pots.forEach(p=>b[p.id]=0);
-  const add=(k,v)=>{ b[k]=(b[k]||0)+v; };
-  state.incomes.forEach(i=>{ for(const k in i.split) add(k, i.split[k]); });
-  state.spends.forEach(s=>add(s.pot, -s.amount));
-  state.moves.forEach(m=>{ add(m.from,-m.amount); add(m.to,m.amount); });
-  state.gold.forEach(g=>add("savings", -g.egp));
-  state.loans.forEach(l=>{ const sg = l.dir==="lent" ? -1 : 1; add(l.pot, sg*l.amount); add(l.pot, -sg*loanPaid(l)); });
-  for(const k in b) b[k]=r2(b[k]);
-  return b;
-}
-function goldStatus(){
-  const G = state.settings.gold;
-  const savedEver = state.incomes.reduce((s,i)=>s+(i.split.savings||0),0) + state.moves.filter(m=>m.to==="savings").reduce((s,m)=>s+m.amount,0);
-  const bought = state.gold.reduce((s,g)=>s+g.egp,0);
-  const dueTotal = Math.floor(savedEver/G.every + 1e-9)*G.buy;
-  const cash = balances().savings;
-  return { savedEver:r2(savedEver), bought:r2(bought), due:r2(Math.max(0, Math.min(dueTotal-bought, cash))), toNext:r2(G.every - (savedEver % G.every)), cash:r2(cash) };
-}
-function perGram(karat){ const gp = state.settings.goldPrice; return gp && gp.p21>0 ? gp.p21*(karat||21)/21 : 0; }
-function goldValue(){
-  let value=0, paid=0, unknown=0;
-  state.gold.forEach(g=>{ paid+=g.egp; if(g.grams>0) value += g.grams*perGram(g.karat||21); else { unknown++; value += g.egp; } });
-  const hasPrice = perGram(21)>0;
-  return { value: hasPrice ? r2(value) : null, paid:r2(paid), unknown, hasPrice };
-}
-function loanTotals(){
-  let owedToMe=0, iOwe=0;
-  state.loans.forEach(l=>{ const left = l.amount - loanPaid(l); if(left<=0.001) return; if(l.dir==="lent") owedToMe+=left; else iOwe+=left; });
-  return { owedToMe:r2(owedToMe), iOwe:r2(iOwe) };
-}
-function zakatStatus(){
-  const N = state.settings.nisab, pg = perGram(N.karat);
-  if(!(pg>0)) return { needPrice:true };
-  const b = balances(), gv = goldValue();
-  let cash = 0; for(const k in b) if(k!=="sadaqah") cash += b[k];
-  const wealth = r2(Math.max(0,cash) + (gv.value||0)), nisab = r2(N.grams*pg), above = wealth >= nisab;
-  const hs = state.zakat.hawlStart, dueDate = hs ? addDays(hs, 354) : null;
-  return { wealth, nisab, above, hawlStart:hs, dueDate, due: !!(above && dueDate && today() >= dueDate), daysLeft: dueDate ? daysBetween(today(), dueDate) : null, amount: Math.ceil(wealth*0.025) };
-}
 function ensureHawl(){ const z = zakatStatus(); if(!z.needPrice && z.above && !state.zakat.hawlStart){ state.zakat.hawlStart = today(); save(); } }
-function inflowPerDay(potId){
-  if(!state.incomes.length) return 0;
-  const first = state.incomes.map(i=>i.date).sort()[0];
-  const from = addDays(today(), -90) > first ? addDays(today(), -90) : first;
-  let sum = 0;
-  state.incomes.forEach(i=>{ if(i.date>=from) sum += (i.split[potId]||0); });
-  state.moves.forEach(m=>{ if(m.date>=from){ if(m.to===potId) sum+=m.amount; if(m.from===potId) sum-=m.amount; } });
-  return Math.max(0, sum/Math.max(30, daysBetween(from, today())+1));
-}
 
 /* ================= routing ================= */
 let view = "home", lastPlan = null, histFilter = "all", reportMonth = null;
@@ -593,7 +494,6 @@ function rowLink(icon, color, title, sub, onclick, value){
 }
 
 /* ================= HOME ================= */
-function savedTotal(){ const gv = goldValue(); return r2((balances().savings||0) + (gv.hasPrice ? gv.value : gv.paid)); }
 let battShown = null;
 function vHome(){
   ensureHawl();
@@ -615,9 +515,12 @@ function vHome(){
   if(z.due) todo.push(`<div class="row static"><span class="bubble" style="--c:var(--danger)">${ic("shield")}</span><span class="grow"><div class="t">${t("Pay zakat")}</div><div class="m num">${egp(z.amount)}</div></span><button class="btn small" onclick="go('gold')">${t("Open")}</button></div>`);
   if((b.sadaqah||0)>0) todo.push(`<div class="row static"><span class="bubble" style="--c:${pot("sadaqah").color}">${ic("moon")}</span><span class="grow"><div class="t">${t("Give sadaqah")}</div><div class="m num">${egp(b.sadaqah)}</div></span><button class="btn small" onclick="sheetSpend('sadaqah')">${t("Done")}</button></div>`);
   if(g.due>0) todo.push(`<div class="row static"><span class="bubble" style="--c:#d9b45a">${ic("gold")}</span><span class="grow"><div class="t">${t("Buy gold")}</div><div class="m num">${egp(g.due)}</div></span><button class="btn small" onclick="sheetGold()">${t("Done")}</button></div>`);
+  if(!(meta.wraps && meta.wraps.rec)) todo.push(`<div class="row static"><span class="bubble" style="--c:#3ddc84">${ic("shield")}</span><span class="grow"><div class="t">${t("Create a recovery code")}</div><div class="m">${t("So a forgotten PIN isn't the end")}</div></span><button class="btn small" onclick="sheetRecovery()">${t("Open")}</button></div>`);
+  const ba = backupAge();
+  if(state.incomes.length && (ba==null || ba>=7)) todo.push(`<div class="row static"><span class="bubble" style="--c:#6fa3ec">${ic("coins")}</span><span class="grow"><div class="t">${t("Save a backup")}</div><div class="m">${ba==null?t("You haven't saved one yet"):t("Last one was {n} days ago",{n:ba})}</div></span><button class="btn small" onclick="exportData(false)">${t("Save")}</button></div>`);
   if(todo.length) h += `<h2>${t("To do")}</h2><div class="rows">${todo.join("")}</div>`;
   // 5. pots as tiles (savings is the battery, "Me" is the top card)
-  const tiles = state.settings.pots.filter(p=>p.id!=="me" && p.id!=="savings").map(p=>{ const v = b[p.id]||0;
+  const tiles = state.settings.pots.filter(p=>p.id!=="me" && p.id!=="savings" && !(p.id==="sadaqah" && (b.sadaqah||0)>0)).map(p=>{ const v = b[p.id]||0;
     return `<button class="ptile" style="--c:${p.color}" onclick="sheetPot('${p.id}')">${bubble(p)}<span class="ptx"><span class="pn">${esc(potName(p))}</span><span class="pv num ${v<0?"neg":""}">${egp(v)}</span></span></button>`; }).join("");
   h += `<h2>${t("Pots")}</h2><div class="pgrid">${tiles}<button class="ptile add" onclick="sheetPotForm()"><span class="bubble dash">${ic("plus")}</span><span class="ptx"><span class="pn">${t("Add a pot")}</span></span></button></div>`;
   if(!state.incomes.length) h += `<div class="note" style="text-align:center;margin-top:16px">${t("Got money? Tap + Add and Mizan splits it for you.")}</div>`;
@@ -777,23 +680,6 @@ function vPlan(){
 }
 
 /* ================= GOALS ================= */
-function goalStatus(w, b){
-  const open = state.wishes.filter(x=>!x.bought && x.pot===w.pot);
-  let cum = 0; for(const x of open){ cum += x.price; if(x.id===w.id) break; }
-  const bal = Math.max(0, b[w.pot]||0);
-  const covered = Math.max(0, Math.min(w.price, bal - (cum - w.price)));
-  const remaining = r2(Math.max(0, cum - bal));
-  const res = { covered, remaining, pct: w.price>0 ? covered/w.price*100 : 100 };
-  if(remaining<=0){ res.kind="ready"; return res; }
-  const rate = inflowPerDay(w.pot);
-  res.eta = rate>0 ? addDays(today(), Math.ceil(remaining/rate)) : null;
-  if(!w.due){ res.kind="nodate"; return res; }
-  const daysLeft = daysBetween(today(), w.due);
-  if(daysLeft<0){ res.kind="late"; return res; }
-  if(res.eta && res.eta<=w.due){ res.kind="ontrack"; return res; }
-  res.kind="behind"; res.extra = Math.ceil(Math.max(0, remaining/(Math.max(daysLeft,1)/30.4) - rate*30.4)/5)*5;
-  return res;
-}
 function vGoals(){
   const b = balances(), open = state.wishes.filter(w=>!w.bought), done = state.wishes.filter(w=>w.bought);
   const items = [];
@@ -834,16 +720,6 @@ function vMore(){
 }
 
 /* ================= REPORT ================= */
-function monthStats(mk){
-  const inc = state.incomes.filter(i=>monthKey(i.date)===mk);
-  const bySrc = {}; inc.forEach(i=>bySrc[i.source]=(bySrc[i.source]||0)+i.amount);
-  const byPot = {}; let gave=0, zakat=0, spent=0;
-  state.spends.filter(s=>monthKey(s.date)===mk).forEach(s=>{ if(s.type==="reset") return; if(s.type==="give") gave+=s.amount; else if(s.type==="zakat") zakat+=s.amount; else { spent+=s.amount; byPot[s.pot]=(byPot[s.pot]||0)+s.amount; } });
-  let saved = inc.reduce((a,i)=>a+(i.split.savings||0),0);
-  state.moves.filter(m=>monthKey(m.date)===mk).forEach(m=>{ if(m.to==="savings") saved+=m.amount; if(m.from==="savings") saved-=m.amount; });
-  const gold = state.gold.filter(g=>monthKey(g.date)===mk);
-  return { in:r2(inc.reduce((a,i)=>a+i.amount,0)), bySrc, spent:r2(spent), byPot, gave:r2(gave), zakat:r2(zakat), saved:r2(saved), goldEgp:r2(gold.reduce((a,g)=>a+g.egp,0)) };
-}
 function deltaTag(cur, prev, goodUp){
   if(!prev && !cur) return "";
   if(!prev) return `<div class="delta">${t("First month")}</div>`;
@@ -959,10 +835,11 @@ function vSettings(){
   <h2>${t("Security & backup")}</h2>
   <div class="rows">
     ${rowLink("lock","#d9b45a",t("Change PIN"),"","sheetChangePin()")}
-    ${rowLink("shield","#d9b45a",t("Save a backup"),t("Locked with your PIN"),"exportData(false)")}
+    ${rowLink("shield","#3ddc84",t("Recovery code"), meta.wraps&&meta.wraps.rec?t("Set up"):t("Not set up yet"),"sheetRecovery()")}
+    ${rowLink("coins","#d9b45a",t("Save a backup"), backupAge()==null?t("Never saved"):backupAge()===0?t("Last saved today"):t("Last saved {n} days ago",{n:backupAge()}),"exportData(false)")}
     ${rowLink("undo","#d9b45a",t("Restore a backup"),"","$('#importFile').click()")}
   </div>
-  <div class="note">${t("If you forget your PIN, your data can't be opened — not even from a backup.")}</div>
+  <div class="note">${t("Backups open with your PIN or your recovery code.")}</div>
   <h2>${t("Advanced")}</h2>
   ${sec(t("How money is split"), `${S.pots.map(p=>`<div class="pctrow"><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="color:${p.color};display:flex">${ic(potIcon(p))}</span>
       ${p.core?esc(potName(p)):`<button class="linkish" onclick="sheetPotForm('${p.id}')">${esc(potName(p))}</button>`}</div>
@@ -1055,29 +932,34 @@ function resetAll(){
   if(!confirm(t("Erase ALL data on this device?"))) return;
   if(!confirm(t("Are you sure? This can't be undone."))) return;
   try{ localStorage.removeItem(KEY_ENC); localStorage.removeItem(KEY_PLAIN); localStorage.removeItem(KEY_FAILS); }catch(e){}
-  state=null; cryptoKey=null; meta=null; showSetup();
+  state=null; cryptoKey=null; dataKeyRaw=null; meta=null; showSetup();
 }
 
 /* ================= BACKUP ================= */
-function download(text, name){
+function download(text, name, done){
   const blob = new Blob([text],{type:"application/json"}), file = new File([blob], name, {type:"application/json"});
-  if(navigator.canShare && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && navigator.canShare({files:[file]})){ navigator.share({files:[file], title:"Mizan"}).catch(()=>{}); return; }
+  if(navigator.canShare && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && navigator.canShare({files:[file]})){
+    navigator.share({files:[file], title:"Mizan"}).then(()=>done&&done()).catch(()=>{}); return;
+  }
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500);
-  toast(t("Saved to your Downloads."));
+  toast(t("Saved to your Downloads.")); done&&done();
 }
+function markBackup(){ state.settings.lastBackup = Date.now(); save(); if(view==="home"||view==="settings") render(); }
 async function exportData(readable){
   if(readable){ if(!confirm(t("Anyone who opens this file can read your data. Continue?"))) return; download(JSON.stringify(state,null,1), `mizan-unlocked-${today()}.json`); }
-  else download(JSON.stringify(await sealWith(cryptoKey, meta, state)), `mizan-backup-${today()}.mizan`);
+  else { const blob = await V.seal(cryptoKey, state, { len: meta.len, wraps: meta.wraps });
+    download(JSON.stringify(blob), `mizan-backup-${today()}.mizan`, markBackup); }
 }
+function backupAge(){ const lb = state.settings.lastBackup; return lb ? Math.floor((Date.now()-lb)/86400000) : null; }
 $("#importFile").addEventListener("change", e=>{
   const f=e.target.files[0]; if(!f) return;
   const rd=new FileReader();
   rd.onload=async ()=>{
     e.target.value="";
     let obj; try{ obj=JSON.parse(rd.result); }catch(err){ return alert(t("This isn't a Mizan backup.")); }
-    if(obj && obj.ct && obj.salt){
-      if(meta && obj.salt===b64(meta.salt)){ try{ return confirmImport(await openWith(cryptoKey, obj)); }catch(err){} }
+    if(obj && obj.ct && (obj.wraps || obj.salt)){
+      if(obj.v===2){ try{ return confirmImport(await V.open(cryptoKey, obj)); }catch(err){} }   // same device: our own key opens it
       return sheetBackupPin(obj);
     }
     if(obj && obj.settings && Array.isArray(obj.incomes)) return confirmImport(obj);
@@ -1090,12 +972,14 @@ function confirmImport(s){
   adopt(s); save(); go("home"); toast(t("Backup restored."));
 }
 function sheetBackupPin(obj){
-  openSheet(`<h3>${t("Backup PIN")}</h3><div class="sub">${t("This backup uses a different PIN.")}</div>
-    <input id="bpPin" type="password" inputmode="numeric" autocomplete="off" style="margin-top:12px;font-size:24px;letter-spacing:6px;text-align:center" autofocus>
+  openSheet(`<h3>${t("Open this backup")}</h3><div class="sub">${t("Enter the PIN or the recovery code this backup was made with.")}</div>
+    <input id="bpPin" type="password" autocomplete="off" autocapitalize="characters" style="margin-top:12px;font-size:20px;letter-spacing:3px;text-align:center" autofocus>
     <div class="two" style="margin-top:16px"><button class="btn ghost" onclick="closeSheet()">${t("Cancel")}</button><button class="btn" id="bpGo">${t("Open")}</button></div>`);
   $("#bpGo").onclick = async ()=>{
-    try{ const k = await deriveKey($("#bpPin").value, unb64(obj.salt), obj.iter||ITER); const s = await openWith(k, obj); closeSheet(); confirmImport(s); }
-    catch(err){ toast(t("Wrong PIN.")); }
+    const btn=$("#bpGo"); btn.disabled=true;
+    try{ const r = await V.openAny(obj, $("#bpPin").value); closeSheet(); confirmImport(r.data); }
+    catch(err){ toast(t("That doesn't open this backup.")); }
+    btn.disabled=false;
   };
 }
 
@@ -1299,16 +1183,45 @@ function doHawl(){ state.zakat.hawlStart=$("#hDate").value||null; save(); closeS
 function sheetChangePin(){
   openSheet(`<h3>${t("Change PIN")}</h3>
     <label class="f">${t("Current PIN")}</label><input id="cp0" type="password" inputmode="numeric" autocomplete="off" autofocus>
-    <label class="f">${t("New PIN (4–6 digits)")}</label><input id="cp1" type="password" inputmode="numeric" autocomplete="off">
+    <label class="f">${t("New PIN (4–8 digits)")}</label><input id="cp1" type="password" inputmode="numeric" autocomplete="off">
     <label class="f">${t("New PIN again")}</label><input id="cp2" type="password" inputmode="numeric" autocomplete="off">
     ${btns(t("Change"), "doChangePin()")}`);
 }
+function sheetRecovery(){
+  const has = !!(meta.wraps && meta.wraps.rec);
+  openSheet(`<h3>${t("Recovery code")}</h3>
+    <div class="sub">${t("If you ever forget your PIN, this code is the only way to open Mizan and your backups.")}</div>
+    <div class="card" style="margin-top:12px;display:flex;gap:10px;align-items:center">${ic(has?"check":"shield")}<div>${has?t("You have a recovery code."):t("You don't have a recovery code yet.")}</div></div>
+    ${btns(has?t("Make a new code"):t("Create my code"), "newRecovery()")}
+    ${has?`<div class="note">${t("Making a new code turns the old one off.")}</div>`:""}`);
+}
+async function newRecovery(){
+  const code = V.newRecoveryCode();
+  meta = { len: meta.len, wraps: { ...meta.wraps, rec: await V.wrapRec(dataKeyRaw, code) } };
+  await save(); closeSheet();
+  showRecovery(code, ()=>{ document.body.classList.remove("locked"); render(); toast(t("Recovery code saved.")); });
+}
+function showRecovery(code, then){
+  document.body.classList.add("locked"); closeSheet();
+  $("#app").innerHTML = `<div class="lock" style="justify-content:flex-start;padding-top:40px">
+    <div class="bless-moon" style="color:#3ddc84">${ic("shield")}</div>
+    <h1>${t("Your recovery code")}</h1>
+    <div class="sub" style="max-width:340px">${t("Write it on paper or save it somewhere safe (not only on this phone). If you forget your PIN, this code is the only way in. It won't be shown again.")}</div>
+    <div class="rcode num" id="rcode">${code.split("-").map(g=>`<span>${g}</span>`).join("")}</div>
+    <div class="two" style="width:100%;max-width:360px"><button class="btn ghost" id="rcCopy">${ic("edit")} ${t("Copy")}</button><button class="btn" id="rcDone" disabled>${t("I saved it")}</button></div>
+    <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:14px;cursor:pointer"><input type="checkbox" id="rcOk" style="width:auto"> ${t("I wrote down my recovery code")}</label>
+  </div>`;
+  $("#rcCopy").onclick = ()=>{ try{ navigator.clipboard.writeText(code).then(()=>toast(t("Copied."))); }catch(e){} };
+  $("#rcOk").onchange = e=>{ $("#rcDone").disabled = !e.target.checked; };
+  $("#rcDone").onclick = ()=>{ padHandler=null; then(); };
+}
 async function doChangePin(){
   const a=$("#cp0").value, b=$("#cp1").value, c=$("#cp2").value;
-  try{ const k=await deriveKey(a, meta.salt, meta.iter); await openWith(k, readBlob()); }catch(e){ return toast(t("Current PIN is wrong.")); }
-  if(!/^\d{4,6}$/.test(b)) return toast(t("PIN must be 4 to 6 digits."));
+  try{ await V.unwrap(meta.wraps.pin, a); }catch(e){ return toast(t("Current PIN is wrong.")); }
+  if(!/^\d{4,8}$/.test(b)) return toast(t("PIN must be 4 to 8 digits."));
   if(b!==c) return toast(t("The new PINs don't match."));
-  await setNewPin(b); closeSheet(); toast(t("PIN changed."));
+  meta = { len: b.length, wraps: { ...meta.wraps, pin: await V.wrapPin(dataKeyRaw, b) } };
+  await save(); closeSheet(); toast(t("PIN changed."));
 }
 
 /* ================= LOCK / UNLOCK ================= */
@@ -1335,7 +1248,7 @@ document.addEventListener("keydown", e=>{
 function shakeDots(){ const d=$("#dots"); if(d){ d.classList.remove("shake"); void d.offsetWidth; d.classList.add("shake"); } padBuf=""; drawDots(); }
 function showPad(title, sub, handler, opts){
   document.body.classList.add("locked"); closeSheet(); applyLang();
-  padMax = (opts&&opts.len) || 6; padAuto = !!(opts&&opts.len); padHandler = handler;
+  padMax = (opts&&opts.len) || (opts&&opts.max) || 8; padAuto = !!(opts&&opts.len); padHandler = handler;
   $("#app").innerHTML = padHTML(title, sub, opts&&opts.extra);
   document.querySelectorAll(".key").forEach(k=>k.onclick=()=>padKey(k.dataset.k));
   padBuf=""; drawDots();
@@ -1344,22 +1257,21 @@ function noCrypto(){ document.body.classList.add("locked"); $("#app").innerHTML 
 function showSetup(){
   if(!window.crypto || !crypto.subtle) return noCrypto();
   const legacy = hasLegacy();
-  showPad(t("Choose a PIN"), t("4 to 6 digits, then press ✓."), pin=>{
+  showPad(t("Choose a PIN"), t("4 to 8 digits, then press ✓."), pin=>{
     const first = pin;
     showPad(t("Type it again"), "", async pin2=>{
       if(pin2!==first){ toast(t("They didn't match. Try again.")); return showSetup(); }
-      let data = DEFAULTS();
-      state = data; await setNewPin(first);
+      padHandler = null;
+      $("#app").innerHTML = `<div class="lock"><div class="sub">${t("Securing your data…")}</div></div>`;
+      const raw = V.newDataKey(), code = V.newRecoveryCode();
+      await useDataKey(raw);
+      meta = { len: first.length, wraps: { pin: await V.wrapPin(raw, first), rec: await V.wrapRec(raw, code) } };
+      state = DEFAULTS(); await save();
       if(legacy){ try{ adopt(JSON.parse(localStorage.getItem(KEY_PLAIN))); await save(); }catch(e){} }
       try{ localStorage.removeItem(KEY_PLAIN); }catch(e){}
-      padHandler=null; startSession(); toast(t("Done. Don't forget your PIN."));
+      showRecovery(code, ()=>{ startSession(); toast(t("Done. Don't forget your PIN.")); });
     }, {len:first.length});
-  });
-}
-async function setNewPin(pin){
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  cryptoKey = await deriveKey(pin, salt, ITER); meta = { salt, iter:ITER, len:pin.length };
-  await save();
+  }, {max:8});
 }
 function fails(){ try{ return JSON.parse(localStorage.getItem(KEY_FAILS))||{n:0,until:0}; }catch(e){ return {n:0,until:0}; } }
 function setFails(f){ try{ localStorage.setItem(KEY_FAILS, JSON.stringify(f)); }catch(e){} }
@@ -1370,24 +1282,58 @@ function showUnlock(){
     const f = fails();
     if(Date.now() < f.until){ shakeDots(); return toast(t("Too many tries. Wait {n} seconds.",{n:Math.ceil((f.until-Date.now())/1000)})); }
     try{
-      const salt = unb64(blob.salt), key = await deriveKey(pin, salt, blob.iter||ITER), s = await openWith(key, blob);
-      cryptoKey = key; meta = { salt, iter: blob.iter||ITER, len: blob.len||pin.length };
-      adopt(s); setFails({n:0,until:0}); padHandler=null; startSession();
+      const r = await V.openAny(blob, pin, { allowRec:false });
+      if(r.raw){ await useDataKey(r.raw); meta = { len: blob.len || pin.length, wraps: blob.wraps }; }
+      else {   // old v1 file: move it to the new format (no recovery code yet)
+        const raw = V.newDataKey(); await useDataKey(raw);
+        meta = { len: pin.length, wraps: { pin: await V.wrapPin(raw, pin), rec: null } };
+      }
+      adopt(r.data); await save(); setFails({n:0,until:0}); padHandler=null; startSession();
     }catch(e){
       f.n++; if(f.n>=5) f.until = Date.now() + 30000*Math.pow(2, f.n-5); setFails(f);
       shakeDots(); toast(f.n>=5 ? t("Wrong PIN. Wait {n} seconds.",{n:Math.round(30*Math.pow(2,f.n-5))}) : t("Wrong PIN."));
     }
   }, { len: blob.len || 0, extra:`<button class="linkbtn" onclick="forgotPin()">${t("Forgot PIN?")}</button>` });
-  if(!blob.len){ padAuto=false; padMax=6; const ok=document.querySelector(".key.go"); if(ok) ok.classList.remove("hidden"); drawDots(); }
+  if(!blob.len){ padAuto=false; padMax=8; const ok=document.querySelector(".key.go"); if(ok) ok.classList.remove("hidden"); drawDots(); }
 }
 function forgotPin(){
+  const blob = readBlob();
+  if(blob && blob.v===2 && blob.wraps && blob.wraps.rec){
+    padHandler = null;
+    $("#app").innerHTML = `<div class="lock">
+      <div class="bless-moon" style="color:#3ddc84">${ic("shield")}</div>
+      <h1>${t("Use your recovery code")}</h1><div class="sub" style="max-width:320px">${t("Type the code you wrote down when you set up Mizan.")}</div>
+      <input id="rcIn" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" style="max-width:360px;margin-top:18px;text-align:center;font-size:18px;letter-spacing:2px">
+      <div class="two" style="width:100%;max-width:360px;margin-top:14px"><button class="btn ghost" onclick="showUnlock()">${t("Back")}</button><button class="btn" id="rcGo">${t("Continue")}</button></div>
+      <button class="linkbtn" onclick="eraseAll()">${t("I lost the code too")}</button></div>`;
+    $("#rcIn").focus();
+    $("#rcGo").onclick = async ()=>{
+      const btn=$("#rcGo"); btn.disabled=true;
+      try{
+        const raw = await V.unwrap(blob.wraps.rec, V.normCode($("#rcIn").value));
+        const data = await V.open(await V.importDataKey(raw), blob);
+        showPad(t("Choose a new PIN"), t("4 to 8 digits, then press ✓."), pin=>{
+          showPad(t("Type it again"), "", async pin2=>{
+            if(pin2!==pin){ toast(t("They didn't match. Try again.")); return forgotPin(); }
+            await useDataKey(raw);
+            meta = { len: pin.length, wraps: { pin: await V.wrapPin(raw, pin), rec: blob.wraps.rec } };
+            adopt(data); await save(); setFails({n:0,until:0}); padHandler=null; startSession(); toast(t("New PIN set."));
+          }, {len:pin.length});
+        }, {max:8});
+      }catch(e){ btn.disabled=false; toast(t("That code doesn't match.")); }
+    };
+    return;
+  }
+  eraseAll();
+}
+function eraseAll(){
   if(!confirm(t("Without the PIN your data can't be opened. Erase everything and start again?"))) return;
   if(!confirm(t("Are you sure? This can't be undone."))) return;
   try{ localStorage.removeItem(KEY_ENC); localStorage.removeItem(KEY_FAILS); }catch(e){}
   showSetup();
 }
 let lastActive = Date.now(), hiddenAt = 0;
-function lockApp(){ if(!state) return; save(); state=null; cryptoKey=null; closeSheet(); showUnlock(); }
+function lockApp(){ if(!state) return; save(); state=null; cryptoKey=null; dataKeyRaw=null; closeSheet(); showUnlock(); }
 function startSession(){ lastActive = Date.now(); heroShown = null; battShown = null; go("home"); }
 ["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev, ()=>{ lastActive=Date.now(); }, {passive:true}));
 document.addEventListener("visibilitychange", ()=>{

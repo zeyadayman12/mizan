@@ -7,9 +7,9 @@ This is our working list. Each item gets done and checked off. Real usage decide
 - [ ] Use Mizan with real money for one month and write down what's missing or annoying
 
 ## 1. Protect people's data
-- [ ] Backup reminders (e.g. weekly), plus a visible "last backup" date
-- [ ] Recovery code shown once at setup, so a forgotten PIN isn't total loss
-- [ ] Longer passcode option and stronger key stretching, to resist offline guessing
+- [x] Backup reminders (weekly), plus a visible "last backup" date
+- [x] Recovery code shown once at setup, so a forgotten PIN isn't total loss
+- [x] Longer PIN (up to 8 digits) and stronger key stretching (600,000 rounds)
 - [ ] Optional encrypted sync between phone and laptop
 
 ## 2. Make it for everyone
@@ -17,8 +17,8 @@ This is our working list. Each item gets done and checked off. Real usage decide
 - [ ] Support currencies other than EGP
 
 ## 3. Engineering
-- [ ] Automatic tests for the split engine and balances
-- [ ] Split `index.html` into organized files (styles, logic, screens, translations)
+- [x] Automatic tests for the split engine, balances, and encryption (`npm test`)
+- [~] Split `index.html` into organized files: math (`engine.js`) and encryption (`vault.js`) are out; styles, screens, and translations still to go
 - [ ] Continue the work in Claude Code on the laptop
 
 ## 4. Test with real people

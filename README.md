@@ -26,7 +26,7 @@ It runs on a phone (installed to the home screen) or a laptop, needs no internet
 | **Goals** | Things to buy, with optional dates. Mizan says whether you're on track and how much more per month you'd need. |
 | **Loans** | Money you lent or borrowed, with partial repayments. |
 | **Monthly report** | Where money came from, what was saved and spent, and the change from last month. |
-| **Privacy** | PIN lock, auto-lock, AES-256-GCM encryption with a key derived by PBKDF2-SHA256 (250,000 iterations), encrypted backups. |
+| **Privacy** | PIN lock (4–8 digits), auto-lock, AES-256-GCM encryption, a recovery code for a forgotten PIN, encrypted backups, and a reminder to save a backup every week. |
 | **Languages** | English and Arabic (full right-to-left layout). |
 | **Look & feel** | Black & gold theme, animations, and a glow on the active tab. |
 
@@ -41,7 +41,10 @@ Data is stored in the browser on each device. Use **Settings → Save a backup**
 ## Project files
 
 ```
-index.html            the whole app (HTML + CSS + JavaScript)
+index.html            the screens (HTML + CSS + JavaScript)
+engine.js             the money math: splits, balances, gold, zakat, goals (no screens)
+vault.js              encryption: PIN, recovery code, backups (no screens)
+tests/                automatic tests for engine.js and vault.js
 sw.js                 offline cache (service worker)
 manifest.webmanifest  install info for phones
 icon-*.png            app icons
@@ -50,11 +53,23 @@ docs/ROADMAP.md       what we plan to improve before publishing
 CHANGELOG.md          version history
 ```
 
-## Security notes
+## Tests
 
-- Data is encrypted at rest. The app cannot open it without the PIN.
-- A 4–6 digit PIN mainly protects against someone opening the app. It is **not** strong against someone who copies the encrypted data and guesses every PIN offline. A longer passcode option is on the roadmap.
-- Forgetting the PIN means the data cannot be recovered. A recovery code is on the roadmap.
+```
+npm test
+```
+
+Runs the automatic tests (Node.js 20+ needed, nothing to install). They check that every split adds up exactly, that sadaqah rounds up, that balances, the gold rule, zakat, goals, and the undo window behave correctly, and that the encryption opens only with the right PIN or recovery code.
+
+## Security design
+
+- **Envelope encryption.** The data is encrypted with a random 256-bit data key (AES-256-GCM). The data key is stored twice, each copy wrapped by a key derived from a secret:
+  - the **PIN** (PBKDF2-SHA256, 600,000 rounds)
+  - the **recovery code**: 20 random characters, about 100 bits (PBKDF2-SHA256, 200,000 rounds)
+- Either secret opens the data. Changing the PIN only re-wraps the data key, so the recovery code keeps working.
+- Backups use the same format, so they open with the PIN or the recovery code on any device.
+- After 5 wrong PINs, the app makes you wait longer and longer between tries.
+- **Limits:** a short PIN still protects mainly against someone opening the app. Someone who copies the encrypted data could try every PIN offline, which is slow at 600,000 rounds each, but a 4-digit PIN has only 10,000 options. Use 6–8 digits for better protection.
 
 ## Religious calculations
 

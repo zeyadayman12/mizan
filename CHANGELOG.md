@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.10: Safety release (27 Sep 2026)
+- **Recovery code:** shown once at setup. It can open Mizan and backups if the PIN is forgotten ("Forgot PIN?" on the lock screen). Existing users are asked to create one.
+- **New encryption design:** a random data key, wrapped by the PIN and by the recovery code. Changing the PIN keeps the recovery code working. Old data upgrades automatically.
+- **Stronger PIN:** 4–8 digits, and 600,000 PBKDF2 rounds (was 250,000).
+- **Backup reminder:** Home shows "Save a backup" if the last one is 7+ days old. Settings shows the last backup date.
+- **Automatic tests:** 25 tests for the money math and the encryption (`npm test`).
+- The money math moved to `engine.js` and the encryption to `vault.js`.
+- Sadaqah is no longer shown twice on Home.
+
 ## v0.9: Savings jar & sadaqah blessing (27 Sep 2026)
 - "Yours to spend" and Savings now sit side by side as two tall cards.
 - Savings is shown as a jar that fills with green toward your target (replaces the battery).
